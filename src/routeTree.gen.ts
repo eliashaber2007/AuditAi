@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SuccessRouteImport } from './routes/success'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as HistoryRouteImport } from './routes/history'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuditRouteImport } from './routes/audit'
 import { Route as IndexRouteImport } from './routes/index'
@@ -25,6 +26,11 @@ const SuccessRoute = SuccessRouteImport.update({
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
   '/auth': typeof AuthRoute
+  '/history': typeof HistoryRoute
   '/pricing': typeof PricingRoute
   '/success': typeof SuccessRoute
   '/results/$id': typeof ResultsIdRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
   '/auth': typeof AuthRoute
+  '/history': typeof HistoryRoute
   '/pricing': typeof PricingRoute
   '/success': typeof SuccessRoute
   '/results/$id': typeof ResultsIdRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
   '/auth': typeof AuthRoute
+  '/history': typeof HistoryRoute
   '/pricing': typeof PricingRoute
   '/success': typeof SuccessRoute
   '/results/$id': typeof ResultsIdRoute
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/audit'
     | '/auth'
+    | '/history'
     | '/pricing'
     | '/success'
     | '/results/$id'
@@ -96,6 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/audit'
     | '/auth'
+    | '/history'
     | '/pricing'
     | '/success'
     | '/results/$id'
@@ -105,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/audit'
     | '/auth'
+    | '/history'
     | '/pricing'
     | '/success'
     | '/results/$id'
@@ -115,6 +127,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuditRoute: typeof AuditRoute
   AuthRoute: typeof AuthRoute
+  HistoryRoute: typeof HistoryRoute
   PricingRoute: typeof PricingRoute
   SuccessRoute: typeof SuccessRoute
   ResultsIdRoute: typeof ResultsIdRoute
@@ -135,6 +148,13 @@ declare module '@tanstack/react-router' {
       path: '/pricing'
       fullPath: '/pricing'
       preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -179,6 +199,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuditRoute: AuditRoute,
   AuthRoute: AuthRoute,
+  HistoryRoute: HistoryRoute,
   PricingRoute: PricingRoute,
   SuccessRoute: SuccessRoute,
   ResultsIdRoute: ResultsIdRoute,
