@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Copy, Check } from "lucide-react";
 import { getReport, type Severity } from "@/lib/qa-storage";
+import { exportReportToPdf } from "@/lib/pdf-export";
 
 export const Route = createFileRoute("/results/$id")({
   head: () => ({
