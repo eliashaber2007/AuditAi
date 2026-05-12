@@ -34,7 +34,13 @@ function AuditPage() {
   const [categories, setCategories] = useState<string[]>(DEFAULT_CATEGORIES);
   const [customInstructions, setCustomInstructions] = useState<string[]>([]);
   const [instructionInput, setInstructionInput] = useState("");
+  const [apiKey, setApiKeyState] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Load existing API key on mount
+  if (typeof window !== "undefined" && apiKey === "" && localStorage.getItem("qa-anthropic-key")) {
+    // one-time hydration
+  }
 
   const toggleCategory = (c: string) => {
     setCategories((prev) =>
