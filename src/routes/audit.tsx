@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { runAudit } from "@/lib/audit.functions";
 import { useAuth } from "@/hooks/use-auth";
+import { useCredits } from "@/hooks/use-credits";
 import { UserMenu } from "@/components/UserMenu";
 
 const STATUS_MESSAGES = [
@@ -41,6 +42,7 @@ const DEFAULT_CATEGORIES = [
 function AuditPage() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
+  const { credits, refresh: refreshCredits } = useCredits();
   const [projectName, setProjectName] = useState("");
   const [projectUrl, setProjectUrl] = useState("");
   const [description, setDescription] = useState("");
@@ -104,6 +106,13 @@ function AuditPage() {
     }
     if (description.trim().length < 200) {
       toast.error("Please add more detail for an accurate audit (minimum 200 characters).");
+      return;
+    }
+    if ((credits ?? 0) <= 0) {
+      navigate({
+        to: "/pricing",
+        search: { msg: "You have no credits left. Buy more to continue." },
+      });
       return;
     }
     setLoading(true);
