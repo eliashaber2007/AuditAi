@@ -129,14 +129,14 @@ function Index() {
             >
               Pricing
             </Link>
-            <UserMenu />
+            <UserMenu variant="dark" />
           </div>
         </div>
       </header>
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="relative px-6 pt-28 pb-24 text-center sm:pt-36 sm:pb-32">
+        <section className="relative px-6 pt-12 pb-20 text-center sm:pt-16 sm:pb-24">
           <div className="mx-auto max-w-3xl">
             <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-neutral-300 backdrop-blur">
               <span className="relative flex h-1.5 w-1.5">

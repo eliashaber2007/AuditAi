@@ -56,7 +56,9 @@ function AuthPage() {
     <div className="flex min-h-screen flex-col bg-white text-neutral-900">
       <header className="border-b border-neutral-100 px-6 py-4">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
-          <Link to="/" className="text-sm font-semibold">Audit.ai</Link>
+          <Link to="/" className="text-[22px] font-bold tracking-tight text-neutral-900">
+            Audit<span className="text-emerald-500">.ai</span>
+          </Link>
         </div>
       </header>
       <main className="flex flex-1 items-center justify-center px-6 py-12">
