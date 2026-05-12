@@ -81,9 +81,13 @@ function AuditPage() {
       };
       saveReport(id, report);
       navigate({ to: "/results/$id", params: { id } });
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      toast.error("Audit failed — check your API key in settings.");
+      if (err?.message === "MISSING_API_KEY") {
+        toast.error("No Anthropic API key found. Go to Settings and add your API key to run an audit.");
+      } else {
+        toast.error("Audit failed — check your API key in settings.");
+      }
       setLoading(false);
     }
   };
