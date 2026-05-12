@@ -48,11 +48,29 @@ function AuditPage() {
   const [apiKey, setApiKeyState] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [statusIdx, setStatusIdx] = useState(0);
 
   useEffect(() => {
     const stored = localStorage.getItem("qa-anthropic-key");
     if (stored) setApiKeyState(stored);
   }, []);
+
+  useEffect(() => {
+    if (!loading) return;
+    setProgress(0);
+    setStatusIdx(0);
+    const progressTimer = setInterval(() => {
+      setProgress((p) => (p < 99 ? p + Math.max(0.3, (99 - p) * 0.015) : 99));
+    }, 200);
+    const statusTimer = setInterval(() => {
+      setStatusIdx((i) => (i + 1) % STATUS_MESSAGES.length);
+    }, 3500);
+    return () => {
+      clearInterval(progressTimer);
+      clearInterval(statusTimer);
+    };
+  }, [loading]);
 
   const onApiKeyChange = (v: string) => {
     setApiKeyState(v);
