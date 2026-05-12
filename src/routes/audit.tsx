@@ -74,11 +74,6 @@ function AuditPage() {
     };
   }, [loading]);
 
-  const onApiKeyChange = (v: string) => {
-    setApiKeyState(v);
-    localStorage.setItem("qa-anthropic-key", v);
-  };
-
   const toggleCategory = (c: string) => {
     setCategories((prev) =>
       prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c],
@@ -98,41 +93,23 @@ function AuditPage() {
       toast.error("Please fill in project name and description.");
       return;
     }
-    if (!apiKey.trim()) {
-      toast.error("Please enter your Anthropic API key above.");
-      return;
-    }
     setLoading(true);
     setErrorText(null);
     try {
-      const report = await runAudit({
-        projectName,
-        projectUrl,
-        description,
-        targetUsers,
-        categories,
-        customInstructions,
+      const { id } = await runAuditFn({
+        data: {
+          projectName,
+          projectUrl,
+          description,
+          targetUsers,
+          categories,
+          customInstructions,
+        },
       });
-      const id = randomId();
-      report.meta = {
-        projectName,
-        projectUrl,
-        description,
-        targetUsers,
-        categories,
-        customInstructions,
-        createdAt: new Date().toISOString(),
-      };
-      saveReport(id, report);
       navigate({ to: "/results/$id", params: { id } });
     } catch (err: any) {
       console.error(err);
-      const msg =
-        err?.message === "MISSING_API_KEY"
-          ? "No Anthropic API key found. Enter your key above to run an audit."
-          : err?.message
-            ? `${err.message}${err?.stack ? `\n\n--- Stack ---\n${err.stack}` : ""}`
-            : String(err);
+      const msg = err?.message ? String(err.message) : String(err);
       setErrorText(msg);
       toast.error("Audit failed — see error details below.");
       setLoading(false);
