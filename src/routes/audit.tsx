@@ -189,7 +189,7 @@ function AuditPage() {
             </div>
             <div>
               <label className="mb-1.5 block text-sm font-medium">
-                Project URL <span className="text-neutral-400">(optional)</span>
+                Project URL
               </label>
               <input
                 value={projectUrl}
