@@ -1,4 +1,3 @@
-import { Buffer } from "node:buffer";
 import Stripe from "stripe";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
@@ -25,12 +24,21 @@ export async function handleStripeWebhookPost(request: Request) {
     return new Response("Webhook not configured", { status: 500 });
   }
 
+  let rawBody: string;
+  try {
+    rawBody = await request.text();
+  } catch (err: any) {
+    console.error("[stripe-webhook] Failed to read raw body:", err?.message);
+    return new Response(`Failed to read request body: ${err?.message}`, {
+      status: 400,
+    });
+  }
+
   const stripe = new Stripe(stripeKey);
-  const rawBody = Buffer.from(await request.arrayBuffer());
 
   let event: Stripe.Event;
   try {
-    event = await stripe.webhooks.constructEventAsync(rawBody, sig, secret);
+    event = stripe.webhooks.constructEvent(rawBody, sig, secret);
   } catch (err: any) {
     console.error("[stripe-webhook] Signature verification failed:", err?.message);
     return new Response(`Bad signature: ${err?.message}`, { status: 403 });
