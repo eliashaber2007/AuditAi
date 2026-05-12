@@ -152,7 +152,7 @@ function AuditPage() {
     <div className="min-h-screen bg-white text-neutral-900">
       <header className="border-b border-neutral-100 px-6 py-4">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
-          <Link to="/" className="text-sm font-semibold">
+          <Link to="/" className="text-[22px] font-bold tracking-tight">
             Audit.ai
           </Link>
           <div className="flex items-center gap-3">
@@ -168,12 +168,12 @@ function AuditPage() {
         </div>
       </header>
       <main className="mx-auto max-w-3xl px-6 py-12">
-        <h1 className="text-3xl font-semibold tracking-tight">New audit</h1>
-        <p className="mt-2 text-sm text-neutral-600">
+        <h1 className="text-center text-3xl font-semibold tracking-tight">New audit</h1>
+        <p className="mt-2 text-center text-sm text-neutral-600">
           Tell us about your product. We'll think like 8 expert testers.
         </p>
 
-        <form onSubmit={handleSubmit} className="mt-10 space-y-10">
+        <form onSubmit={handleSubmit} className="mt-12 space-y-12">
           <section className="space-y-5">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-500">
               Project info
@@ -206,7 +206,9 @@ function AuditPage() {
                 </span>
                 <span
                   className={`text-xs font-normal tabular-nums ${
-                    description.length < 200 ? "text-red-600" : "text-neutral-400"
+                    description.length > 0 && description.length < 200
+                      ? "text-red-600"
+                      : "text-neutral-400"
                   }`}
                 >
                   {description.length}/500
