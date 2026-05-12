@@ -66,7 +66,7 @@ export async function runAudit(input: AuditInput): Promise<Report> {
     },
     body: JSON.stringify({
       model: "claude-sonnet-4-5",
-      max_tokens: 4000,
+      max_tokens: 8000,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: buildUserMessage(input) }],
     }),
