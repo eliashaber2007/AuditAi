@@ -6,7 +6,7 @@ import { exportReportToPdf } from "@/lib/pdf-export";
 
 export const Route = createFileRoute("/results/$id")({
   head: () => ({
-    meta: [{ title: "Audit results — QA Agent" }],
+    meta: [{ title: "Audit results — Audit.ai" }],
   }),
   component: ResultsPage,
 });
@@ -81,7 +81,7 @@ function ResultsPage() {
       <header className="border-b border-neutral-100 px-6 py-4 print:hidden">
         <div className="mx-auto flex max-w-5xl items-center justify-between">
           <Link to="/" className="text-sm font-semibold">
-            QA Agent
+            Audit.ai
           </Link>
           <Link to="/settings" className="text-xs text-neutral-500 hover:underline">
             Settings
