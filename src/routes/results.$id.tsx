@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { Copy, Check } from "lucide-react";
 import { getReport, type Severity } from "@/lib/qa-storage";
 
 export const Route = createFileRoute("/results/$id")({
@@ -35,6 +36,18 @@ function ResultsPage() {
   const report = useMemo(() => getReport(id), [id]);
   const [filter, setFilter] = useState<Filter>("all");
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyReport = async () => {
+    if (!report) return;
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(report, null, 2));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // ignore
+    }
+  };
 
   if (!report) {
     return (
@@ -81,6 +94,21 @@ function ResultsPage() {
             {report.meta?.projectName || "Audit results"}
           </h1>
           <p className="mt-3 max-w-3xl text-sm text-neutral-600">{report.summary}</p>
+        </div>
+
+        <div className="mt-8 flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4 print:hidden">
+          <div className="flex-1 text-sm text-blue-900">
+            <strong className="font-semibold">This report is best read with an AI assistant.</strong>{" "}
+            Copy the full report and paste it into Claude or ChatGPT to get explanations, priorities, and a fix plan.
+          </div>
+          <button
+            onClick={handleCopyReport}
+            className="shrink-0 rounded-md border border-blue-300 bg-white p-2 text-blue-700 transition-colors hover:bg-blue-100"
+            aria-label="Copy report JSON"
+            title="Copy full report JSON"
+          >
+            {copied ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
+          </button>
         </div>
 
         <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
