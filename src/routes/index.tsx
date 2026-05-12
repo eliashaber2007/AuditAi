@@ -38,6 +38,45 @@ const STEPS = [
   },
 ];
 
+const SAMPLE_ISSUES: {
+  severity: "critical" | "medium" | "minor";
+  category: string;
+  title: string;
+  detail: string;
+  fix: string;
+}[] = [
+  {
+    severity: "critical",
+    category: "Payment & transaction logic",
+    title: "Failed Stripe payments leave users on a blank screen",
+    detail:
+      "When a card is declined during checkout, the UI shows no error state — the spinner disappears and the page reverts to the cart with no feedback. Users are likely to retry blindly or abandon.",
+    fix: "Catch the Stripe error from confirmCardPayment and surface a contextual message (decline reason, retry CTA, switch payment method).",
+  },
+  {
+    severity: "critical",
+    category: "Security surface",
+    title: "Supabase anon key used for privileged writes",
+    detail:
+      "The /invite endpoint writes to the members table from the browser using the anon key without an RLS policy restricting inserts. Anyone can add themselves to any pot.",
+    fix: "Move the insert behind a server function, validate pot ownership, and add an RLS policy: insert allowed only when auth.uid() = inviter_id.",
+  },
+  {
+    severity: "medium",
+    category: "Onboarding experience",
+    title: "First-run empty state has no guidance",
+    detail:
+      "After signup, users land on an empty dashboard with no explanation of what a 'pot' is or how to create one. Time-to-first-value is effectively infinite.",
+    fix: "Add an empty-state card with a one-line explanation, an example screenshot, and a primary 'Create your first pot' button.",
+  },
+];
+
+const SEVERITY_STYLES: Record<"critical" | "medium" | "minor", string> = {
+  critical: "bg-red-50 text-red-700 ring-1 ring-inset ring-red-200",
+  medium: "bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200",
+  minor: "bg-neutral-100 text-neutral-700 ring-1 ring-inset ring-neutral-200",
+};
+
 const CATEGORIES: { name: string; desc: string }[] = [
   { name: "UI & visual design", desc: "Spacing, hierarchy, contrast, polish." },
   { name: "User flows end-to-end", desc: "Friction points across complete journeys." },
