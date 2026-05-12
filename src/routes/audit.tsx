@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { runAudit } from "@/lib/anthropic";
-import { saveReport, randomId, getApiKey } from "@/lib/qa-storage";
+import { saveReport, randomId } from "@/lib/qa-storage";
 
 export const Route = createFileRoute("/audit")({
   head: () => ({
