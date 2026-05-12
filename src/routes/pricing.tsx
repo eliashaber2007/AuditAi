@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { createCheckout, PRICE_PACKS } from "@/lib/credits.functions";
 import { useAuth } from "@/hooks/use-auth";
 import { UserMenu } from "@/components/UserMenu";
+import { SiteFooter } from "@/components/SiteFooter";
 
 export const Route = createFileRoute("/pricing")({
   validateSearch: (s: Record<string, unknown>) => ({
@@ -85,6 +86,7 @@ function PricingPage() {
           ))}
         </div>
       </main>
+      <SiteFooter />
     </div>
   );
 }

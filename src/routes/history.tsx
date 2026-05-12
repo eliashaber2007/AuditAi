@@ -5,6 +5,7 @@ import { listMyAudits, type AuditSummary } from "@/lib/history.functions";
 import { useAuth } from "@/hooks/use-auth";
 import { useCredits } from "@/hooks/use-credits";
 import { UserMenu } from "@/components/UserMenu";
+import { SiteFooter } from "@/components/SiteFooter";
 
 export const Route = createFileRoute("/history")({
   head: () => ({
@@ -120,6 +121,7 @@ function HistoryPage() {
           </ul>
         )}
       </main>
+      <SiteFooter />
     </div>
   );
 }

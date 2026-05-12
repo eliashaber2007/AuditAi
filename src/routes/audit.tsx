@@ -6,6 +6,7 @@ import { runAudit } from "@/lib/audit.functions";
 import { useAuth } from "@/hooks/use-auth";
 import { useCredits } from "@/hooks/use-credits";
 import { UserMenu } from "@/components/UserMenu";
+import { SiteFooter } from "@/components/SiteFooter";
 
 const STATUS_MESSAGES = [
   "Analysing UI & visual design...",
@@ -358,6 +359,7 @@ function AuditPage() {
           </div>
         </form>
       </main>
+      <SiteFooter />
     </div>
   );
 }
