@@ -3,6 +3,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { runAudit } from "@/lib/audit.functions";
+import { useAuth } from "@/hooks/use-auth";
+import { UserMenu } from "@/components/UserMenu";
 
 const STATUS_MESSAGES = [
   "Analysing UI & visual design...",
