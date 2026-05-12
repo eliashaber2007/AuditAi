@@ -3,13 +3,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "QA Agent — AI-powered product audits" },
+      { title: "Audit.ai — AI-powered product audits" },
       {
         name: "description",
         content:
           "Describe your product. Get a full AI-powered QA audit in minutes.",
       },
-      { property: "og:title", content: "QA Agent" },
+      { property: "og:title", content: "Audit.ai" },
       {
         property: "og:description",
         content: "Describe your product. Get a full audit in minutes.",
@@ -29,7 +29,7 @@ function Index() {
             AI-powered product testing
           </div>
           <h1 className="text-5xl font-semibold tracking-tight sm:text-6xl">
-            QA Agent
+            Audit.ai
           </h1>
           <p className="mt-5 text-lg text-neutral-600 sm:text-xl">
             Describe your product. Get a full audit in minutes.
@@ -45,7 +45,7 @@ function Index() {
         </div>
       </main>
       <footer className="border-t border-neutral-100 px-6 py-6 text-center text-xs text-neutral-500">
-        <span>QA Agent</span>
+        <span>Audit.ai</span>
       </footer>
     </div>
   );
