@@ -15,9 +15,9 @@ export const Route = createFileRoute("/pricing")({
 });
 
 const PACKS = [
-  { key: "starter", ...PRICE_PACKS.starter },
-  { key: "pack5", ...PRICE_PACKS.pack5, popular: true },
-  { key: "pack20", ...PRICE_PACKS.pack20 },
+  { key: "starter", popular: false, ...PRICE_PACKS.starter },
+  { key: "pack5", popular: true, ...PRICE_PACKS.pack5 },
+  { key: "pack20", popular: false, ...PRICE_PACKS.pack20 },
 ];
 
 function PricingPage() {
