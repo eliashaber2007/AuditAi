@@ -99,7 +99,9 @@ function AuditPage() {
       const msg =
         err?.message === "MISSING_API_KEY"
           ? "No Anthropic API key found. Enter your key above to run an audit."
-          : err?.stack || err?.message || String(err);
+          : err?.message
+            ? `${err.message}${err?.stack ? `\n\n--- Stack ---\n${err.stack}` : ""}`
+            : String(err);
       setErrorText(msg);
       toast.error("Audit failed — see error details below.");
       setLoading(false);
