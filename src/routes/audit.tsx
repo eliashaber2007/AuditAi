@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { runAudit } from "@/lib/anthropic";
-import { saveReport, randomId } from "@/lib/qa-storage";
+import { runAudit } from "@/lib/audit.functions";
 
 const STATUS_MESSAGES = [
   "Analysing UI & visual design...",
@@ -45,16 +45,11 @@ function AuditPage() {
   const [categories, setCategories] = useState<string[]>(DEFAULT_CATEGORIES);
   const [customInstructions, setCustomInstructions] = useState<string[]>([]);
   const [instructionInput, setInstructionInput] = useState("");
-  const [apiKey, setApiKeyState] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const [statusIdx, setStatusIdx] = useState(0);
-
-  useEffect(() => {
-    const stored = localStorage.getItem("qa-anthropic-key");
-    if (stored) setApiKeyState(stored);
-  }, []);
+  const runAuditFn = useServerFn(runAudit);
 
   useEffect(() => {
     if (!loading) {
@@ -79,11 +74,6 @@ function AuditPage() {
     };
   }, [loading]);
 
-  const onApiKeyChange = (v: string) => {
-    setApiKeyState(v);
-    localStorage.setItem("qa-anthropic-key", v);
-  };
-
   const toggleCategory = (c: string) => {
     setCategories((prev) =>
       prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c],
@@ -103,41 +93,23 @@ function AuditPage() {
       toast.error("Please fill in project name and description.");
       return;
     }
-    if (!apiKey.trim()) {
-      toast.error("Please enter your Anthropic API key above.");
-      return;
-    }
     setLoading(true);
     setErrorText(null);
     try {
-      const report = await runAudit({
-        projectName,
-        projectUrl,
-        description,
-        targetUsers,
-        categories,
-        customInstructions,
+      const { id } = await runAuditFn({
+        data: {
+          projectName,
+          projectUrl,
+          description,
+          targetUsers,
+          categories,
+          customInstructions,
+        },
       });
-      const id = randomId();
-      report.meta = {
-        projectName,
-        projectUrl,
-        description,
-        targetUsers,
-        categories,
-        customInstructions,
-        createdAt: new Date().toISOString(),
-      };
-      saveReport(id, report);
       navigate({ to: "/results/$id", params: { id } });
     } catch (err: any) {
       console.error(err);
-      const msg =
-        err?.message === "MISSING_API_KEY"
-          ? "No Anthropic API key found. Enter your key above to run an audit."
-          : err?.message
-            ? `${err.message}${err?.stack ? `\n\n--- Stack ---\n${err.stack}` : ""}`
-            : String(err);
+      const msg = err?.message ? String(err.message) : String(err);
       setErrorText(msg);
       toast.error("Audit failed — see error details below.");
       setLoading(false);
@@ -281,22 +253,6 @@ function AuditPage() {
             )}
           </section>
 
-          <section>
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-500">
-              Anthropic API Key
-            </h2>
-            <input
-              type="password"
-              value={apiKey}
-              onChange={(e) => onApiKeyChange(e.target.value)}
-              placeholder="sk-ant-..."
-              autoComplete="off"
-              className="mt-4 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm font-mono outline-none focus:border-neutral-400"
-            />
-            <p className="mt-2 text-xs text-neutral-500">
-              Stored locally in your browser under <code>qa-anthropic-key</code>. Never sent to our servers.
-            </p>
-          </section>
 
           <div className="border-t border-neutral-100 pt-8">
             {loading ? (

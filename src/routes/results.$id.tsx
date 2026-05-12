@@ -1,7 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Copy, Check } from "lucide-react";
-import { getReport, type Severity } from "@/lib/qa-storage";
+import { supabase } from "@/integrations/supabase/client";
+import { type Report, type Severity } from "@/lib/qa-storage";
 import { exportReportToPdf } from "@/lib/pdf-export";
 
 export const Route = createFileRoute("/results/$id")({
@@ -34,10 +35,30 @@ type Filter = "all" | Severity;
 function ResultsPage() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
-  const report = useMemo(() => getReport(id), [id]);
+  const [report, setReport] = useState<Report | null>(null);
+  const [loadState, setLoadState] = useState<"loading" | "ready" | "missing">("loading");
   const [filter, setFilter] = useState<Filter>("all");
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data, error } = await supabase
+        .from("audits")
+        .select("report")
+        .eq("id", id)
+        .maybeSingle();
+      if (cancelled) return;
+      if (error || !data) {
+        setLoadState("missing");
+        return;
+      }
+      setReport(data.report as unknown as Report);
+      setLoadState("ready");
+    })();
+    return () => { cancelled = true; };
+  }, [id]);
 
   const handleCopyReport = async () => {
     if (!report) return;
@@ -50,7 +71,15 @@ function ResultsPage() {
     }
   };
 
-  if (!report) {
+  if (loadState === "loading") {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-white text-sm text-neutral-500">
+        Loading report…
+      </div>
+    );
+  }
+
+  if (loadState === "missing" || !report) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-white px-6 text-center">
         <h1 className="text-2xl font-semibold">Report not found</h1>
