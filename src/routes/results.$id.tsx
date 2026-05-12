@@ -111,6 +111,7 @@ function ResultsPage() {
           </button>
         </div>
 
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
           <MetricCard label="Critical" value={counts.critical} tone="red" />
           <MetricCard label="Medium" value={counts.medium} tone="amber" />
           <MetricCard label="Minor" value={counts.minor} tone="green" />
