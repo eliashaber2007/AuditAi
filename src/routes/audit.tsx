@@ -132,9 +132,19 @@ function AuditPage() {
     } catch (err: any) {
       console.error(err);
       const msg = err?.message ? String(err.message) : String(err);
+      if (msg.includes("NO_CREDITS")) {
+        refreshCredits();
+        navigate({
+          to: "/pricing",
+          search: { msg: "You have no credits left. Buy more to continue." },
+        });
+        return;
+      }
       setErrorText(msg);
       toast.error("Audit failed — see error details below.");
       setLoading(false);
+    } finally {
+      refreshCredits();
     }
   };
 
@@ -145,7 +155,16 @@ function AuditPage() {
           <Link to="/" className="text-sm font-semibold">
             Audit.ai
           </Link>
-          <UserMenu />
+          <div className="flex items-center gap-3">
+            <Link
+              to="/pricing"
+              className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium tabular-nums text-neutral-700 hover:bg-neutral-200"
+              title="Buy more credits"
+            >
+              {credits ?? "—"} credit{credits === 1 ? "" : "s"}
+            </Link>
+            <UserMenu />
+          </div>
         </div>
       </header>
       <main className="mx-auto max-w-3xl px-6 py-12">
