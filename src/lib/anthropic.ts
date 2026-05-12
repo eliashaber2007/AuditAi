@@ -72,10 +72,21 @@ export async function runAudit(input: AuditInput): Promise<Report> {
     }),
   });
 
-  if (!res.ok) throw new Error(`API error ${res.status}`);
-  const data = await res.json();
+  const rawBody = await res.text();
+  if (!res.ok) {
+    throw new Error(`Anthropic API error ${res.status} ${res.statusText}\n\n${rawBody}`);
+  }
+  let data: any;
+  try {
+    data = JSON.parse(rawBody);
+  } catch (e) {
+    throw new Error(`Failed to parse API response as JSON:\n\n${rawBody}`);
+  }
   const text: string = data?.content?.[0]?.text ?? "";
   const cleaned = stripFences(text);
-  const parsed = JSON.parse(cleaned) as Report;
-  return parsed;
+  try {
+    return JSON.parse(cleaned) as Report;
+  } catch (e: any) {
+    throw new Error(`Failed to parse model output as JSON:\n${e?.message}\n\nRaw model text:\n${text}`);
+  }
 }
