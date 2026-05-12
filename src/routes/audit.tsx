@@ -3,6 +3,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { runAudit } from "@/lib/audit.functions";
+import { useAuth } from "@/hooks/use-auth";
+import { UserMenu } from "@/components/UserMenu";
 
 const STATUS_MESSAGES = [
   "Analysing UI & visual design...",
@@ -38,6 +40,7 @@ const DEFAULT_CATEGORIES = [
 
 function AuditPage() {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const [projectName, setProjectName] = useState("");
   const [projectUrl, setProjectUrl] = useState("");
   const [description, setDescription] = useState("");
@@ -50,6 +53,12 @@ function AuditPage() {
   const [progress, setProgress] = useState(0);
   const [statusIdx, setStatusIdx] = useState(0);
   const runAuditFn = useServerFn(runAudit);
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate({ to: "/auth" });
+    }
+  }, [authLoading, user, navigate]);
 
   useEffect(() => {
     if (!loading) {
@@ -123,6 +132,7 @@ function AuditPage() {
           <Link to="/" className="text-sm font-semibold">
             Audit.ai
           </Link>
+          <UserMenu />
         </div>
       </header>
       <main className="mx-auto max-w-3xl px-6 py-12">

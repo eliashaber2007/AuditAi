@@ -4,6 +4,7 @@ import { Copy, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { type Report, type Severity } from "@/lib/qa-storage";
 import { exportReportToPdf } from "@/lib/pdf-export";
+import { UserMenu } from "@/components/UserMenu";
 
 export const Route = createFileRoute("/results/$id")({
   head: () => ({
@@ -112,9 +113,7 @@ function ResultsPage() {
           <Link to="/" className="text-sm font-semibold">
             Audit.ai
           </Link>
-          <Link to="/settings" className="text-xs text-neutral-500 hover:underline">
-            Settings
-          </Link>
+          <UserMenu />
         </div>
       </header>
 
