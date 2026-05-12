@@ -99,7 +99,7 @@ const SEVERITY_STYLES: Record<"critical" | "medium" | "minor", string> = {
   minor: "bg-white/5 text-neutral-300 ring-1 ring-inset ring-white/10",
 };
 
-const LOGOS = ["Northwind", "Acme Labs", "Helios", "Lumen", "Foundry", "Parallax"];
+
 
 function Index() {
   return (
