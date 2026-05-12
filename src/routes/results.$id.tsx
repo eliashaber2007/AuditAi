@@ -185,7 +185,7 @@ function ResultsPage() {
 
         <div className="mt-10 flex flex-wrap gap-3 border-t border-neutral-100 pt-6 print:hidden">
           <button
-            onClick={() => window.print()}
+            onClick={() => exportReportToPdf(report)}
             className="rounded-md border border-neutral-200 px-4 py-2 text-sm font-medium hover:bg-neutral-50"
           >
             Export as PDF
