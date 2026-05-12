@@ -36,6 +36,18 @@ function ResultsPage() {
   const report = useMemo(() => getReport(id), [id]);
   const [filter, setFilter] = useState<Filter>("all");
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyReport = async () => {
+    if (!report) return;
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(report, null, 2));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // ignore
+    }
+  };
 
   if (!report) {
     return (
