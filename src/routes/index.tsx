@@ -40,7 +40,7 @@ const STEPS = [
   {
     n: "02",
     title: "Choose what to test",
-    body: "Pick from 8 expert testing categories.",
+    body: "Pick your testing categories.",
   },
   {
     n: "03",
@@ -205,7 +205,7 @@ function Index() {
                 What we test
               </h2>
               <p className="mt-3 text-neutral-400">
-                Eight expert testers, one report.
+                One report. Every angle covered.
               </p>
             </div>
             <div className="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-4">
