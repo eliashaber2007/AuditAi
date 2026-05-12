@@ -57,12 +57,19 @@ function AuditPage() {
   }, []);
 
   useEffect(() => {
-    if (!loading) return;
+    if (!loading) {
+      if (progress > 0 && progress < 100) setProgress(100);
+      return;
+    }
     setProgress(0);
     setStatusIdx(0);
+    const start = Date.now();
+    const DURATION = 45000; // 45s to reach 95%
     const progressTimer = setInterval(() => {
-      setProgress((p) => (p < 99 ? p + Math.max(0.3, (99 - p) * 0.015) : 99));
-    }, 200);
+      const elapsed = Date.now() - start;
+      const pct = Math.min(95, (elapsed / DURATION) * 95);
+      setProgress(pct);
+    }, 100);
     const statusTimer = setInterval(() => {
       setStatusIdx((i) => (i + 1) % STATUS_MESSAGES.length);
     }, 3500);
