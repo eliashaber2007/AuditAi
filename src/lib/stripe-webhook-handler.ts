@@ -42,7 +42,7 @@ export async function handleStripeWebhookPost(request: Request) {
 
   let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(rawBody, sig, secret);
+    event = await stripe.webhooks.constructEventAsync(rawBody, sig, secret);
   } catch (err: any) {
     console.error("[stripe-webhook] Signature verification failed:", err?.message);
     return new Response(`Bad signature: ${err?.message}`, { status: 403 });
