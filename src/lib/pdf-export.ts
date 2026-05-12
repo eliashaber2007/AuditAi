@@ -55,7 +55,7 @@ export function exportReportToPdf(report: Report) {
 
   // Title
   writeText(projectName, { size: 22, style: "bold", gap: 4 });
-  writeText("QA Audit Report", { size: 12, color: [110, 110, 110], gap: 14 });
+  writeText("Audit.ai Report", { size: 12, color: [110, 110, 110], gap: 14 });
 
   // Score
   writeText(`Score: ${report.score} / 100`, { size: 14, style: "bold", gap: 10 });
