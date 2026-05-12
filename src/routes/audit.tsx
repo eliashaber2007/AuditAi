@@ -275,6 +275,16 @@ function AuditPage() {
                 "Run audit →"
               )}
             </button>
+            {errorText && (
+              <div className="mt-6 rounded-md border border-red-200 bg-red-50 p-4">
+                <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-red-800">
+                  Error response
+                </div>
+                <pre className="whitespace-pre-wrap break-words font-mono text-xs text-red-900">
+{errorText}
+                </pre>
+              </div>
+            )}
           </div>
         </form>
       </main>
