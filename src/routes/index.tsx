@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { UserMenu } from "@/components/UserMenu";
 
 export const Route = createFileRoute("/")({
   head: () => ({
