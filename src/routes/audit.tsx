@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { runAudit } from "@/lib/anthropic";
-import { saveReport, randomId, getApiKey } from "@/lib/qa-storage";
+import { saveReport, randomId } from "@/lib/qa-storage";
 
 export const Route = createFileRoute("/audit")({
   head: () => ({
@@ -34,7 +34,18 @@ function AuditPage() {
   const [categories, setCategories] = useState<string[]>(DEFAULT_CATEGORIES);
   const [customInstructions, setCustomInstructions] = useState<string[]>([]);
   const [instructionInput, setInstructionInput] = useState("");
+  const [apiKey, setApiKeyState] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("qa-anthropic-key");
+    if (stored) setApiKeyState(stored);
+  }, []);
+
+  const onApiKeyChange = (v: string) => {
+    setApiKeyState(v);
+    localStorage.setItem("qa-anthropic-key", v);
+  };
 
   const toggleCategory = (c: string) => {
     setCategories((prev) =>
@@ -55,8 +66,8 @@ function AuditPage() {
       toast.error("Please fill in project name and description.");
       return;
     }
-    if (!getApiKey()) {
-      toast.error("No API key set. Add one in Settings.");
+    if (!apiKey.trim()) {
+      toast.error("Please enter your Anthropic API key above.");
       return;
     }
     setLoading(true);
@@ -84,9 +95,9 @@ function AuditPage() {
     } catch (err: any) {
       console.error(err);
       if (err?.message === "MISSING_API_KEY") {
-        toast.error("No Anthropic API key found. Go to Settings and add your API key to run an audit.");
+        toast.error("No Anthropic API key found. Enter your key above to run an audit.");
       } else {
-        toast.error("Audit failed — check your API key in settings.");
+        toast.error("Audit failed — check your API key.");
       }
       setLoading(false);
     }
@@ -98,9 +109,6 @@ function AuditPage() {
         <div className="mx-auto flex max-w-3xl items-center justify-between">
           <Link to="/" className="text-sm font-semibold">
             QA Agent
-          </Link>
-          <Link to="/settings" className="text-xs text-neutral-500 hover:underline">
-            Settings
           </Link>
         </div>
       </header>
@@ -230,6 +238,23 @@ function AuditPage() {
                 ))}
               </div>
             )}
+          </section>
+
+          <section>
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-500">
+              Anthropic API Key
+            </h2>
+            <input
+              type="password"
+              value={apiKey}
+              onChange={(e) => onApiKeyChange(e.target.value)}
+              placeholder="sk-ant-..."
+              autoComplete="off"
+              className="mt-4 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm font-mono outline-none focus:border-neutral-400"
+            />
+            <p className="mt-2 text-xs text-neutral-500">
+              Stored locally in your browser under <code>qa-anthropic-key</code>. Never sent to our servers.
+            </p>
           </section>
 
           <div className="border-t border-neutral-100 pt-8">
