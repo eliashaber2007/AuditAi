@@ -98,8 +98,12 @@ function AuditPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!projectName.trim() || !description.trim()) {
-      toast.error("Please fill in project name and description.");
+    if (!projectName.trim()) {
+      toast.error("Please fill in project name.");
+      return;
+    }
+    if (description.trim().length < 200) {
+      toast.error("Please add more detail for an accurate audit (minimum 200 characters).");
       return;
     }
     setLoading(true);
@@ -167,17 +171,29 @@ function AuditPage() {
               />
             </div>
             <div>
-              <label className="mb-1.5 block text-sm font-medium">
-                Short description{" "}
-                <span className="text-neutral-400">({description.length}/500)</span>
+              <label className="mb-1.5 flex items-center justify-between text-sm font-medium">
+                <span>
+                  Short description{" "}
+                  <span className="text-neutral-400">(min 200)</span>
+                </span>
+                <span
+                  className={`text-xs font-normal tabular-nums ${
+                    description.length < 200 ? "text-red-600" : "text-neutral-400"
+                  }`}
+                >
+                  {description.length}/500
+                </span>
               </label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value.slice(0, 500))}
-                rows={4}
+                rows={6}
                 className="w-full resize-none rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm outline-none focus:border-neutral-400"
-                placeholder="What does the product do?"
+                placeholder="e.g. A React/TypeScript web app with Stripe payments targeting French students. Key features: shared payment pots, member invitations, SEPA transfers, Apple Pay. Currently in pre-launch with 0 users."
               />
+              <p className="mt-1.5 text-xs text-neutral-500">
+                Be specific — describe your tech stack, key features, payment flows, and target users. The more detail you give, the more accurate your audit.
+              </p>
             </div>
             <div>
               <label className="mb-1.5 block text-sm font-medium">Target users</label>
