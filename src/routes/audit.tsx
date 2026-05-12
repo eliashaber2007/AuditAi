@@ -292,20 +292,34 @@ function AuditPage() {
           </section>
 
           <div className="border-t border-neutral-100 pt-8">
-            <button
-              type="submit"
-              disabled={loading}
-              className="inline-flex items-center justify-center gap-3 rounded-md bg-neutral-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800 disabled:opacity-70"
-            >
-              {loading ? (
-                <>
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                  Auditing your product…
-                </>
-              ) : (
-                "Run audit →"
-              )}
-            </button>
+            {loading ? (
+              <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-8">
+                <div className="flex items-baseline justify-between">
+                  <div className="text-sm font-medium text-neutral-700 transition-opacity duration-300">
+                    {STATUS_MESSAGES[statusIdx]}
+                  </div>
+                  <div className="font-mono text-2xl font-semibold tabular-nums text-neutral-900">
+                    {Math.floor(progress)}%
+                  </div>
+                </div>
+                <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-neutral-200">
+                  <div
+                    className="h-full rounded-full bg-neutral-900 transition-all duration-200 ease-out"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+                <p className="mt-4 text-xs text-neutral-500">
+                  Thinking like 8 expert testers. This usually takes 30–60 seconds.
+                </p>
+              </div>
+            ) : (
+              <button
+                type="submit"
+                className="inline-flex items-center justify-center gap-3 rounded-md bg-neutral-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+              >
+                Run audit →
+              </button>
+            )}
             {errorText && (
               <div className="mt-6 rounded-md border border-red-200 bg-red-50 p-4">
                 <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-red-800">
