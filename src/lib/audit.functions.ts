@@ -168,7 +168,7 @@ export const runAudit = createServerFn({ method: "POST" })
 
     const { data: row, error } = await supabaseAdmin
       .from("audits")
-      .insert({ project_name: data.projectName, report })
+      .insert({ project_name: data.projectName, report: report as any })
       .select("id")
       .single();
 
