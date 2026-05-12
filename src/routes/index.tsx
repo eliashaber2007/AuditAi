@@ -40,7 +40,7 @@ const STEPS = [
   {
     n: "02",
     title: "Choose what to test",
-    body: "Pick from 8 expert testing categories.",
+    body: "Pick your testing categories.",
   },
   {
     n: "03",
