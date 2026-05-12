@@ -15,9 +15,9 @@ export const Route = createFileRoute("/pricing")({
 });
 
 const PACKS = [
-  { key: "starter", popular: false, ...PRICE_PACKS.starter },
-  { key: "pack5", popular: true, ...PRICE_PACKS.pack5 },
-  { key: "pack20", popular: false, ...PRICE_PACKS.pack20 },
+  { key: "starter", popular: false, perAudit: "€2.00 / audit", ...PRICE_PACKS.starter },
+  { key: "pack5", popular: true, perAudit: "€1.60 / audit", ...PRICE_PACKS.pack5 },
+  { key: "pack20", popular: false, perAudit: "€1.25 / audit", ...PRICE_PACKS.pack20 },
 ];
 
 function PricingPage() {
@@ -58,26 +58,24 @@ function PricingPage() {
             {msg}
           </div>
         )}
-        <div className="mt-10 grid gap-6 sm:grid-cols-3">
+        <div className="mt-12 grid gap-8 sm:grid-cols-3">
           {PACKS.map((p) => (
             <div
               key={p.key}
-              className={`rounded-lg border p-6 ${p.popular ? "border-neutral-900" : "border-neutral-200"}`}
+              className={`flex flex-col rounded-xl border p-8 ${p.popular ? "border-neutral-900 shadow-sm" : "border-neutral-200"}`}
             >
               {p.popular && (
-                <div className="mb-2 inline-block rounded bg-neutral-900 px-2 py-0.5 text-xs font-medium text-white">
+                <div className="mb-3 inline-block self-start rounded bg-neutral-900 px-2 py-0.5 text-xs font-medium text-white">
                   Popular
                 </div>
               )}
               <div className="text-lg font-semibold">{p.label}</div>
-              <div className="mt-2 text-3xl font-bold tabular-nums">{p.price}</div>
-              <div className="mt-1 text-xs text-neutral-500">
-                {p.credits === 1 ? "1 credit" : `${p.credits} credits`}
-              </div>
+              <div className="mt-4 text-4xl font-bold tabular-nums">{p.price}</div>
+              <div className="mt-2 text-xs text-neutral-500">{p.perAudit}</div>
               <button
                 onClick={() => buy(p.key)}
                 disabled={loadingKey !== null}
-                className="mt-6 w-full rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-60"
+                className="mt-8 w-full rounded-md bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-60"
               >
                 {loadingKey === p.key ? "Redirecting…" : "Buy"}
               </button>
