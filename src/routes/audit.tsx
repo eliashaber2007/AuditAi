@@ -18,7 +18,7 @@ const STATUS_MESSAGES = [
 export const Route = createFileRoute("/audit")({
   head: () => ({
     meta: [
-      { title: "New audit — QA Agent" },
+      { title: "New audit — Audit.ai" },
       { name: "description", content: "Describe your product to start a new QA audit." },
     ],
   }),
@@ -149,7 +149,7 @@ function AuditPage() {
       <header className="border-b border-neutral-100 px-6 py-4">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
           <Link to="/" className="text-sm font-semibold">
-            QA Agent
+            Audit.ai
           </Link>
         </div>
       </header>
