@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { runAudit } from "@/lib/anthropic";
-import { saveReport, randomId } from "@/lib/qa-storage";
+import { runAudit } from "@/lib/audit.functions";
 
 const STATUS_MESSAGES = [
   "Analysing UI & visual design...",
