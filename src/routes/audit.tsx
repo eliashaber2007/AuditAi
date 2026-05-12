@@ -36,6 +36,7 @@ function AuditPage() {
   const [instructionInput, setInstructionInput] = useState("");
   const [apiKey, setApiKeyState] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errorText, setErrorText] = useState<string | null>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem("qa-anthropic-key");
@@ -71,6 +72,7 @@ function AuditPage() {
       return;
     }
     setLoading(true);
+    setErrorText(null);
     try {
       const report = await runAudit({
         projectName,
@@ -94,11 +96,12 @@ function AuditPage() {
       navigate({ to: "/results/$id", params: { id } });
     } catch (err: any) {
       console.error(err);
-      if (err?.message === "MISSING_API_KEY") {
-        toast.error("No Anthropic API key found. Enter your key above to run an audit.");
-      } else {
-        toast.error("Audit failed — check your API key.");
-      }
+      const msg =
+        err?.message === "MISSING_API_KEY"
+          ? "No Anthropic API key found. Enter your key above to run an audit."
+          : err?.stack || err?.message || String(err);
+      setErrorText(msg);
+      toast.error("Audit failed — see error details below.");
       setLoading(false);
     }
   };
@@ -272,6 +275,16 @@ function AuditPage() {
                 "Run audit →"
               )}
             </button>
+            {errorText && (
+              <div className="mt-6 rounded-md border border-red-200 bg-red-50 p-4">
+                <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-red-800">
+                  Error response
+                </div>
+                <pre className="whitespace-pre-wrap break-words font-mono text-xs text-red-900">
+{errorText}
+                </pre>
+              </div>
+            )}
           </div>
         </form>
       </main>
