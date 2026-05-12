@@ -14,6 +14,7 @@ export async function handleStripeWebhookPost(request: Request) {
   const sig = request.headers.get("stripe-signature");
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
   const stripeKey = process.env.STRIPE_SECRET_KEY;
+
   console.log(
     "[stripe-webhook] STRIPE_WEBHOOK_SECRET prefix:",
     secret ? `${secret.slice(0, 10)} (len=${secret.length})` : "MISSING",
@@ -23,6 +24,7 @@ export async function handleStripeWebhookPost(request: Request) {
     console.error("[stripe-webhook] Missing stripe-signature header");
     return new Response("Missing signature", { status: 400 });
   }
+
   if (!secret || !stripeKey) {
     console.error("[stripe-webhook] Missing STRIPE_* env vars");
     return new Response("Webhook not configured", { status: 500 });
@@ -38,11 +40,19 @@ export async function handleStripeWebhookPost(request: Request) {
     });
   }
 
-  const stripe = new Stripe(stripeKey);
+  const stripe = new Stripe(stripeKey, {
+    httpClient: Stripe.createFetchHttpClient(),
+  });
 
   let event: Stripe.Event;
   try {
-    event = await stripe.webhooks.constructEventAsync(rawBody, sig, secret);
+    event = await stripe.webhooks.constructEventAsync(
+      rawBody,
+      sig,
+      secret,
+      undefined,
+      Stripe.createSubtleCryptoProvider(),
+    );
   } catch (err: any) {
     console.error("[stripe-webhook] Signature verification failed:", err?.message);
     return new Response(`Bad signature: ${err?.message}`, { status: 403 });
@@ -67,6 +77,7 @@ export async function handleStripeWebhookPost(request: Request) {
         .select("credits")
         .eq("user_id", userId)
         .maybeSingle();
+
       const current = existing?.credits ?? 0;
 
       const { error } = await supabaseAdmin.from("user_credits").upsert({
@@ -74,14 +85,14 @@ export async function handleStripeWebhookPost(request: Request) {
         credits: current + credits,
         updated_at: new Date().toISOString(),
       });
+
       if (error) {
         console.error("[stripe-webhook] DB upsert failed", error);
         return new Response("DB error", { status: 500 });
       }
+
       console.log(
-        `[stripe-webhook] Credited user ${userId} with ${credits} credits (now ${
-          current + credits
-        })`,
+        `[stripe-webhook] Credited user ${userId} with ${credits} credits (now ${current + credits})`,
       );
     } else {
       console.log(`[stripe-webhook] Ignored event type ${event.type}`);
