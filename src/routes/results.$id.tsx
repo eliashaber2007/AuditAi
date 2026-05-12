@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { Copy, Check } from "lucide-react";
 import { getReport, type Severity } from "@/lib/qa-storage";
 
 export const Route = createFileRoute("/results/$id")({
