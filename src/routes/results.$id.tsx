@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Copy, Check } from "lucide-react";
 import { getReport, type Severity } from "@/lib/qa-storage";
+import { exportReportToPdf } from "@/lib/pdf-export";
 
 export const Route = createFileRoute("/results/$id")({
   head: () => ({
@@ -185,7 +186,7 @@ function ResultsPage() {
 
         <div className="mt-10 flex flex-wrap gap-3 border-t border-neutral-100 pt-6 print:hidden">
           <button
-            onClick={() => window.print()}
+            onClick={() => exportReportToPdf(report)}
             className="rounded-md border border-neutral-200 px-4 py-2 text-sm font-medium hover:bg-neutral-50"
           >
             Export as PDF
