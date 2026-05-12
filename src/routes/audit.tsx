@@ -1,8 +1,19 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { runAudit } from "@/lib/anthropic";
 import { saveReport, randomId } from "@/lib/qa-storage";
+
+const STATUS_MESSAGES = [
+  "Analysing UI & visual design...",
+  "Testing user flows...",
+  "Checking payment logic...",
+  "Auditing mobile responsiveness...",
+  "Reviewing copy & microcopy...",
+  "Probing security surface...",
+  "Comparing to competitors...",
+  "Writing report...",
+];
 
 export const Route = createFileRoute("/audit")({
   head: () => ({
