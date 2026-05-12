@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as AuditRouteImport } from './routes/audit'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ResultsIdRouteImport } from './routes/results.$id'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuditRoute = AuditRouteImport.update({
   id: '/audit',
   path: '/audit',
@@ -32,35 +38,46 @@ const ResultsIdRoute = ResultsIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
+  '/settings': typeof SettingsRoute
   '/results/$id': typeof ResultsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
+  '/settings': typeof SettingsRoute
   '/results/$id': typeof ResultsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
+  '/settings': typeof SettingsRoute
   '/results/$id': typeof ResultsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/audit' | '/results/$id'
+  fullPaths: '/' | '/audit' | '/settings' | '/results/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/audit' | '/results/$id'
-  id: '__root__' | '/' | '/audit' | '/results/$id'
+  to: '/' | '/audit' | '/settings' | '/results/$id'
+  id: '__root__' | '/' | '/audit' | '/settings' | '/results/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuditRoute: typeof AuditRoute
+  SettingsRoute: typeof SettingsRoute
   ResultsIdRoute: typeof ResultsIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/audit': {
       id: '/audit'
       path: '/audit'
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuditRoute: AuditRoute,
+  SettingsRoute: SettingsRoute,
   ResultsIdRoute: ResultsIdRoute,
 }
 export const routeTree = rootRouteImport
