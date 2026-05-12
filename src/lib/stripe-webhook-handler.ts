@@ -14,6 +14,10 @@ export async function handleStripeWebhookPost(request: Request) {
   const sig = request.headers.get("stripe-signature");
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
   const stripeKey = process.env.STRIPE_SECRET_KEY;
+  console.log(
+    "[stripe-webhook] STRIPE_WEBHOOK_SECRET prefix:",
+    secret ? `${secret.slice(0, 10)} (len=${secret.length})` : "MISSING",
+  );
 
   if (!sig) {
     console.error("[stripe-webhook] Missing stripe-signature header");
