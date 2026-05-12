@@ -50,8 +50,11 @@ function stripFences(text: string): string {
 }
 
 export async function runAudit(input: AuditInput): Promise<Report> {
-  const apiKey = getApiKey();
-  if (!apiKey) throw new Error("Missing API key");
+  const apiKey = (typeof window !== "undefined" && localStorage.getItem("qa-anthropic-key")) || getApiKey();
+  console.log("Anthropic API Key:", apiKey ? `${apiKey.slice(0, 10)}…(${apiKey.length} chars)` : "(none)");
+  if (!apiKey || !apiKey.trim()) {
+    throw new Error("MISSING_API_KEY");
+  }
 
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -62,7 +65,7 @@ export async function runAudit(input: AuditInput): Promise<Report> {
       "anthropic-dangerous-direct-browser-access": "true",
     },
     body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-5-20250929",
       max_tokens: 4000,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: buildUserMessage(input) }],
