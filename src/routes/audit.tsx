@@ -37,10 +37,15 @@ function AuditPage() {
   const [apiKey, setApiKeyState] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Load existing API key on mount
-  if (typeof window !== "undefined" && apiKey === "" && localStorage.getItem("qa-anthropic-key")) {
-    // one-time hydration
-  }
+  useEffect(() => {
+    const stored = localStorage.getItem("qa-anthropic-key");
+    if (stored) setApiKeyState(stored);
+  }, []);
+
+  const onApiKeyChange = (v: string) => {
+    setApiKeyState(v);
+    localStorage.setItem("qa-anthropic-key", v);
+  };
 
   const toggleCategory = (c: string) => {
     setCategories((prev) =>
@@ -61,8 +66,8 @@ function AuditPage() {
       toast.error("Please fill in project name and description.");
       return;
     }
-    if (!getApiKey()) {
-      toast.error("No API key set. Add one in Settings.");
+    if (!apiKey.trim()) {
+      toast.error("Please enter your Anthropic API key above.");
       return;
     }
     setLoading(true);
