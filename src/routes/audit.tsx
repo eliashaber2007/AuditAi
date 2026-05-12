@@ -110,9 +110,6 @@ function AuditPage() {
           <Link to="/" className="text-sm font-semibold">
             QA Agent
           </Link>
-          <Link to="/settings" className="text-xs text-neutral-500 hover:underline">
-            Settings
-          </Link>
         </div>
       </header>
       <main className="mx-auto max-w-3xl px-6 py-12">
