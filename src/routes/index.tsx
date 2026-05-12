@@ -163,28 +163,6 @@ function Index() {
                 Run your first audit
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
-              <p className="text-xs text-neutral-500">
-                1 free audit on signup. No card required.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Logos row */}
-        <section className="border-t border-white/5 px-6 py-12">
-          <div className="mx-auto max-w-5xl">
-            <p className="text-center text-xs font-medium uppercase tracking-[0.18em] text-neutral-500">
-              Trusted by builders shipping fast
-            </p>
-            <div className="mt-8 grid grid-cols-3 items-center justify-items-center gap-x-8 gap-y-6 sm:grid-cols-6">
-              {LOGOS.map((l) => (
-                <div
-                  key={l}
-                  className="text-base font-semibold tracking-tight text-neutral-600 transition-colors hover:text-neutral-400"
-                >
-                  {l}
-                </div>
-              ))}
             </div>
           </div>
         </section>
