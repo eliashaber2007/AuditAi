@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { type Report, type Severity } from "@/lib/qa-storage";
 import { exportReportToPdf } from "@/lib/pdf-export";
 import { UserMenu } from "@/components/UserMenu";
+import { SiteFooter } from "@/components/SiteFooter";
 
 export const Route = createFileRoute("/results/$id")({
   head: () => ({
@@ -227,6 +228,7 @@ function ResultsPage() {
           </button>
         </div>
       </main>
+      <SiteFooter />
     </div>
   );
 }

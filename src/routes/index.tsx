@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { UserMenu } from "@/components/UserMenu";
+import { SiteFooter } from "@/components/SiteFooter";
 import {
   Palette,
   Route as RouteIcon,
@@ -351,24 +352,7 @@ function Index() {
         </section>
       </main>
 
-      <footer className="border-t border-white/5 px-6 py-10">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 sm:flex-row">
-          <div className="text-sm font-semibold">
-            Audit<span className="text-emerald-400">.ai</span>
-          </div>
-          <nav className="flex items-center gap-6 text-sm text-neutral-400">
-            <Link to="/pricing" className="hover:text-white">
-              Pricing
-            </Link>
-            <Link to="/auth" className="hover:text-white">
-              Login
-            </Link>
-          </nav>
-          <div className="text-xs text-neutral-600">
-            © {new Date().getFullYear()} Audit.ai
-          </div>
-        </div>
-      </footer>
+      <SiteFooter variant="dark" />
     </div>
   );
 }

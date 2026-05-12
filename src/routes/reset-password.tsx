@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { SiteFooter } from "@/components/SiteFooter";
 
 export const Route = createFileRoute("/reset-password")({
   head: () => ({ meta: [{ title: "Reset password — Audit.ai" }] }),
@@ -70,6 +71,7 @@ function ResetPasswordPage() {
           </form>
         </div>
       </main>
+      <SiteFooter />
     </div>
   );
 }
