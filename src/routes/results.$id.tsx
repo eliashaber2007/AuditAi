@@ -228,6 +228,7 @@ function ResultsPage() {
           </button>
         </div>
       </main>
+      <SiteFooter />
     </div>
   );
 }
