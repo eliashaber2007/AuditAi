@@ -43,15 +43,16 @@ export function UserMenu({ variant = "light" }: { variant?: Variant }) {
   };
 
   const handleChangePassword = async () => {
-    const next = window.prompt("Enter a new password (min 6 characters):");
-    if (!next) return;
-    if (next.length < 6) {
-      toast.error("Password must be at least 6 characters.");
-      return;
+    if (!user?.email) return;
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) throw error;
+      toast.success("Password reset email sent.");
+    } catch (err: any) {
+      toast.error(err?.message ?? "Failed to send reset email");
     }
-    const { error } = await supabase.auth.updateUser({ password: next });
-    if (error) toast.error(error.message);
-    else toast.success("Password updated.");
     setOpen(false);
   };
 
