@@ -40,6 +40,7 @@ const DEFAULT_CATEGORIES = [
 
 function AuditPage() {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const [projectName, setProjectName] = useState("");
   const [projectUrl, setProjectUrl] = useState("");
   const [description, setDescription] = useState("");
@@ -52,6 +53,12 @@ function AuditPage() {
   const [progress, setProgress] = useState(0);
   const [statusIdx, setStatusIdx] = useState(0);
   const runAuditFn = useServerFn(runAudit);
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate({ to: "/auth" });
+    }
+  }, [authLoading, user, navigate]);
 
   useEffect(() => {
     if (!loading) {
