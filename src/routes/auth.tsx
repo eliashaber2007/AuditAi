@@ -4,6 +4,9 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/auth")({
+  validateSearch: (s: Record<string, unknown>) => ({
+    msg: typeof s.msg === "string" ? s.msg : undefined,
+  }),
   head: () => ({
     meta: [{ title: "Sign in — Audit.ai" }],
   }),
@@ -12,10 +15,15 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const navigate = useNavigate();
+  const { msg } = Route.useSearch();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (msg) toast.success(msg);
+  }, [msg]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
