@@ -72,6 +72,7 @@ function AuditPage() {
       return;
     }
     setLoading(true);
+    setErrorText(null);
     try {
       const report = await runAudit({
         projectName,
@@ -95,11 +96,12 @@ function AuditPage() {
       navigate({ to: "/results/$id", params: { id } });
     } catch (err: any) {
       console.error(err);
-      if (err?.message === "MISSING_API_KEY") {
-        toast.error("No Anthropic API key found. Enter your key above to run an audit.");
-      } else {
-        toast.error("Audit failed — check your API key.");
-      }
+      const msg =
+        err?.message === "MISSING_API_KEY"
+          ? "No Anthropic API key found. Enter your key above to run an audit."
+          : err?.stack || err?.message || String(err);
+      setErrorText(msg);
+      toast.error("Audit failed — see error details below.");
       setLoading(false);
     }
   };
