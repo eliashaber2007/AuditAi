@@ -23,6 +23,11 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <div className="flex min-h-screen flex-col bg-white text-neutral-900">
+      <header className="px-6 py-4">
+        <div className="mx-auto flex max-w-5xl items-center justify-end">
+          <UserMenu />
+        </div>
+      </header>
       <main className="flex flex-1 flex-col items-center justify-center px-6 text-center">
         <div className="max-w-2xl">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1 text-xs font-medium text-neutral-600">
