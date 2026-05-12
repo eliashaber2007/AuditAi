@@ -1,3 +1,4 @@
+import { Buffer } from "node:buffer";
 import Stripe from "stripe";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
@@ -25,14 +26,14 @@ export async function handleStripeWebhookPost(request: Request) {
   }
 
   const stripe = new Stripe(stripeKey);
-  const body = await request.text();
+  const rawBody = Buffer.from(await request.arrayBuffer());
 
   let event: Stripe.Event;
   try {
-    event = await stripe.webhooks.constructEventAsync(body, sig, secret);
+    event = await stripe.webhooks.constructEventAsync(rawBody, sig, secret);
   } catch (err: any) {
     console.error("[stripe-webhook] Signature verification failed:", err?.message);
-    return new Response(`Bad signature: ${err?.message}`, { status: 400 });
+    return new Response(`Bad signature: ${err?.message}`, { status: 403 });
   }
 
   try {
