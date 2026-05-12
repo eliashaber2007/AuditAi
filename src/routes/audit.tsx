@@ -95,9 +95,9 @@ function AuditPage() {
     } catch (err: any) {
       console.error(err);
       if (err?.message === "MISSING_API_KEY") {
-        toast.error("No Anthropic API key found. Go to Settings and add your API key to run an audit.");
+        toast.error("No Anthropic API key found. Enter your key above to run an audit.");
       } else {
-        toast.error("Audit failed — check your API key in settings.");
+        toast.error("Audit failed — check your API key.");
       }
       setLoading(false);
     }
