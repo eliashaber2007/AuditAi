@@ -86,7 +86,53 @@ export async function runAudit(input: AuditInput): Promise<Report> {
   const cleaned = stripFences(text);
   try {
     return JSON.parse(cleaned) as Report;
-  } catch (e: any) {
-    throw new Error(`Failed to parse model output as JSON:\n${e?.message}\n\nRaw model text:\n${text}`);
+  } catch {
+    const repaired = repairTruncatedJson(cleaned);
+    if (repaired) {
+      try {
+        return JSON.parse(repaired) as Report;
+      } catch (e: any) {
+        throw new Error(`Failed to parse model output as JSON (after repair):\n${e?.message}\n\nRaw model text:\n${text}`);
+      }
+    }
+    throw new Error(`Failed to parse model output as JSON.\n\nRaw model text:\n${text}`);
   }
+}
+
+// Attempts to recover a truncated JSON object of the shape { ..., "issues": [ ... ] }
+// by trimming an incomplete trailing element from the issues array and closing brackets.
+function repairTruncatedJson(input: string): string | null {
+  const issuesIdx = input.indexOf('"issues"');
+  if (issuesIdx === -1) return null;
+  const arrStart = input.indexOf("[", issuesIdx);
+  if (arrStart === -1) return null;
+
+  // Walk forward tracking depth & strings, recording end index of each complete top-level issue object.
+  let depth = 0;
+  let inStr = false;
+  let escape = false;
+  let lastCompleteObjEnd = -1; // index of '}' of last complete element inside the array
+  let arrayClosed = false;
+  for (let i = arrStart; i < input.length; i++) {
+    const ch = input[i];
+    if (inStr) {
+      if (escape) escape = false;
+      else if (ch === "\\") escape = true;
+      else if (ch === '"') inStr = false;
+      continue;
+    }
+    if (ch === '"') { inStr = true; continue; }
+    if (ch === "{" || ch === "[") depth++;
+    else if (ch === "}" || ch === "]") {
+      depth--;
+      if (ch === "}" && depth === 1) lastCompleteObjEnd = i; // depth 1 = inside array
+      if (ch === "]" && depth === 0) { arrayClosed = true; break; }
+    }
+  }
+  if (arrayClosed) return null; // not the truncation case we handle
+  if (lastCompleteObjEnd === -1) {
+    // No complete issues — close with empty array
+    return input.slice(0, arrStart + 1) + "]}";
+  }
+  return input.slice(0, lastCompleteObjEnd + 1) + "]}";
 }
