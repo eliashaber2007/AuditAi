@@ -132,6 +132,7 @@ function AuditPage() {
           <Link to="/" className="text-sm font-semibold">
             Audit.ai
           </Link>
+          <UserMenu />
         </div>
       </header>
       <main className="mx-auto max-w-3xl px-6 py-12">
