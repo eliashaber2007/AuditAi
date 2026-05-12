@@ -157,6 +157,12 @@ function AuditPage() {
           </Link>
           <div className="flex items-center gap-3">
             <Link
+              to="/history"
+              className="text-sm font-medium text-neutral-700 hover:text-neutral-900"
+            >
+              My audits
+            </Link>
+            <Link
               to="/pricing"
               className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium tabular-nums text-neutral-700 hover:bg-neutral-200"
               title="Buy more credits"
@@ -168,9 +174,9 @@ function AuditPage() {
         </div>
       </header>
       <main className="mx-auto max-w-3xl px-6 py-12">
-        <h1 className="text-center text-3xl font-semibold tracking-tight">New audit</h1>
+        <h1 className="text-center text-3xl font-semibold tracking-tight">What are we testing today?</h1>
         <p className="mt-2 text-center text-sm text-neutral-600">
-          Tell us about your product. We'll think like 8 expert testers.
+          The more detail you give, the sharper the audit.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-12 space-y-12">
