@@ -45,16 +45,11 @@ function AuditPage() {
   const [categories, setCategories] = useState<string[]>(DEFAULT_CATEGORIES);
   const [customInstructions, setCustomInstructions] = useState<string[]>([]);
   const [instructionInput, setInstructionInput] = useState("");
-  const [apiKey, setApiKeyState] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const [statusIdx, setStatusIdx] = useState(0);
-
-  useEffect(() => {
-    const stored = localStorage.getItem("qa-anthropic-key");
-    if (stored) setApiKeyState(stored);
-  }, []);
+  const runAuditFn = useServerFn(runAudit);
 
   useEffect(() => {
     if (!loading) {
