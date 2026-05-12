@@ -71,6 +71,7 @@ function ResetPasswordPage() {
           </form>
         </div>
       </main>
+      <SiteFooter />
     </div>
   );
 }
