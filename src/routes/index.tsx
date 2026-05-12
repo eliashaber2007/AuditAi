@@ -38,6 +38,45 @@ const STEPS = [
   },
 ];
 
+const SAMPLE_ISSUES: {
+  severity: "critical" | "medium" | "minor";
+  category: string;
+  title: string;
+  detail: string;
+  fix: string;
+}[] = [
+  {
+    severity: "critical",
+    category: "Payment & transaction logic",
+    title: "Failed Stripe payments leave users on a blank screen",
+    detail:
+      "When a card is declined during checkout, the UI shows no error state — the spinner disappears and the page reverts to the cart with no feedback. Users are likely to retry blindly or abandon.",
+    fix: "Catch the Stripe error from confirmCardPayment and surface a contextual message (decline reason, retry CTA, switch payment method).",
+  },
+  {
+    severity: "critical",
+    category: "Security surface",
+    title: "Supabase anon key used for privileged writes",
+    detail:
+      "The /invite endpoint writes to the members table from the browser using the anon key without an RLS policy restricting inserts. Anyone can add themselves to any pot.",
+    fix: "Move the insert behind a server function, validate pot ownership, and add an RLS policy: insert allowed only when auth.uid() = inviter_id.",
+  },
+  {
+    severity: "medium",
+    category: "Onboarding experience",
+    title: "First-run empty state has no guidance",
+    detail:
+      "After signup, users land on an empty dashboard with no explanation of what a 'pot' is or how to create one. Time-to-first-value is effectively infinite.",
+    fix: "Add an empty-state card with a one-line explanation, an example screenshot, and a primary 'Create your first pot' button.",
+  },
+];
+
+const SEVERITY_STYLES: Record<"critical" | "medium" | "minor", string> = {
+  critical: "bg-red-50 text-red-700 ring-1 ring-inset ring-red-200",
+  medium: "bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200",
+  minor: "bg-neutral-100 text-neutral-700 ring-1 ring-inset ring-neutral-200",
+};
+
 const CATEGORIES: { name: string; desc: string }[] = [
   { name: "UI & visual design", desc: "Spacing, hierarchy, contrast, polish." },
   { name: "User flows end-to-end", desc: "Friction points across complete journeys." },
@@ -91,42 +130,6 @@ function Index() {
         </section>
 
         {/* Sample score card */}
-        <section className="px-6 pb-20">
-          <div className="mx-auto max-w-2xl">
-            <p className="mb-4 text-center text-xs font-semibold uppercase tracking-wide text-neutral-500">
-              A sample report
-            </p>
-            <div className="rounded-xl border border-neutral-200 bg-white p-8 shadow-sm">
-              <div className="flex items-start justify-between gap-6">
-                <div>
-                  <div className="text-sm text-neutral-500">Acme App</div>
-                  <div className="mt-1 text-base font-semibold">Overall audit score</div>
-                  <p className="mt-2 max-w-sm text-sm text-neutral-600">
-                    Solid foundations with several friction points in checkout and onboarding.
-                  </p>
-                </div>
-                <div className="text-right">
-                  <div className="text-5xl font-bold tabular-nums">71</div>
-                  <div className="text-xs uppercase tracking-wide text-neutral-400">/ 100</div>
-                </div>
-              </div>
-              <div className="mt-6 grid grid-cols-3 gap-3">
-                <div className="rounded-md bg-red-50 p-3 text-center">
-                  <div className="text-2xl font-bold text-red-700 tabular-nums">3</div>
-                  <div className="text-[11px] uppercase tracking-wide text-red-700/80">Critical</div>
-                </div>
-                <div className="rounded-md bg-amber-50 p-3 text-center">
-                  <div className="text-2xl font-bold text-amber-700 tabular-nums">7</div>
-                  <div className="text-[11px] uppercase tracking-wide text-amber-700/80">Medium</div>
-                </div>
-                <div className="rounded-md bg-neutral-100 p-3 text-center">
-                  <div className="text-2xl font-bold text-neutral-700 tabular-nums">9</div>
-                  <div className="text-[11px] uppercase tracking-wide text-neutral-500">Minor</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* How it works */}
         <section className="border-t border-neutral-100 bg-neutral-50/40 px-6 py-20">
@@ -164,6 +167,78 @@ function Index() {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* Sample report */}
+        <section className="border-t border-neutral-100 bg-neutral-50/40 px-6 py-20">
+          <div className="mx-auto max-w-3xl">
+            <h2 className="text-center text-3xl font-semibold tracking-tight">
+              Here's what a real report looks like
+            </h2>
+            <p className="mx-auto mt-3 max-w-xl text-center text-sm text-neutral-600">
+              Every audit comes with a prioritised list of issues and concrete fix suggestions.
+            </p>
+
+            <div className="mt-12 overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm">
+              <div className="flex items-start justify-between gap-6 p-8">
+                <div>
+                  <div className="text-sm text-neutral-500">Acme App</div>
+                  <div className="mt-1 text-base font-semibold">Overall audit score</div>
+                  <p className="mt-2 max-w-sm text-sm text-neutral-600">
+                    Solid foundations with several friction points in checkout and onboarding.
+                  </p>
+                </div>
+                <div className="text-right">
+                  <div className="text-5xl font-bold tabular-nums">71</div>
+                  <div className="text-xs uppercase tracking-wide text-neutral-400">/ 100</div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3 px-8">
+                <div className="rounded-md bg-red-50 p-3 text-center">
+                  <div className="text-2xl font-bold text-red-700 tabular-nums">3</div>
+                  <div className="text-[11px] uppercase tracking-wide text-red-700/80">Critical</div>
+                </div>
+                <div className="rounded-md bg-amber-50 p-3 text-center">
+                  <div className="text-2xl font-bold text-amber-700 tabular-nums">7</div>
+                  <div className="text-[11px] uppercase tracking-wide text-amber-700/80">Medium</div>
+                </div>
+                <div className="rounded-md bg-neutral-100 p-3 text-center">
+                  <div className="text-2xl font-bold text-neutral-700 tabular-nums">9</div>
+                  <div className="text-[11px] uppercase tracking-wide text-neutral-500">Minor</div>
+                </div>
+              </div>
+
+              <div className="mt-8 border-t border-neutral-100">
+                <div className="px-8 py-5 text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                  Top issues
+                </div>
+                <ul className="divide-y divide-neutral-100">
+                  {SAMPLE_ISSUES.map((issue, i) => (
+                    <li key={i} className="px-8 py-6">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${SEVERITY_STYLES[issue.severity]}`}
+                        >
+                          {issue.severity}
+                        </span>
+                        <span className="text-xs text-neutral-500">{issue.category}</span>
+                      </div>
+                      <h4 className="mt-2 text-sm font-semibold text-neutral-900">
+                        {issue.title}
+                      </h4>
+                      <p className="mt-2 text-sm text-neutral-600">{issue.detail}</p>
+                      <div className="mt-3 rounded-md bg-neutral-50 p-3 text-sm text-neutral-700">
+                        <span className="font-semibold text-neutral-900">Suggested fix: </span>
+                        {issue.fix}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
             <div className="mt-12 text-center">
               <Link
                 to="/audit"
