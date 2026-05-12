@@ -240,6 +240,23 @@ function AuditPage() {
             )}
           </section>
 
+          <section>
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-500">
+              Anthropic API Key
+            </h2>
+            <input
+              type="password"
+              value={apiKey}
+              onChange={(e) => onApiKeyChange(e.target.value)}
+              placeholder="sk-ant-..."
+              autoComplete="off"
+              className="mt-4 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm font-mono outline-none focus:border-neutral-400"
+            />
+            <p className="mt-2 text-xs text-neutral-500">
+              Stored locally in your browser under <code>qa-anthropic-key</code>. Never sent to our servers.
+            </p>
+          </section>
+
           <div className="border-t border-neutral-100 pt-8">
             <button
               type="submit"
