@@ -45,10 +45,7 @@ function Index() {
         </div>
       </main>
       <footer className="border-t border-neutral-100 px-6 py-6 text-center text-xs text-neutral-500">
-        <span>QA Agent · </span>
-        <Link to="/settings" className="underline-offset-2 hover:underline">
-          Settings
-        </Link>
+        <span>QA Agent</span>
       </footer>
     </div>
   );
