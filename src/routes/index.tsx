@@ -15,7 +15,7 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Audit.ai — AI-powered product audits" },
+      { title: "Audit.ai. AI-powered product audits" },
       {
         name: "description",
         content:
