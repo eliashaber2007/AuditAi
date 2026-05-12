@@ -346,9 +346,6 @@ function Index() {
                 Run your first audit
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
-              <p className="text-xs text-neutral-500">
-                1 free audit on signup.
-              </p>
             </div>
           </div>
         </section>
