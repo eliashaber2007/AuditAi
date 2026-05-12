@@ -153,7 +153,7 @@ function Index() {
             </h1>
             <p className="mx-auto mt-6 max-w-xl text-pretty text-lg text-neutral-400">
               Describe your product, get a forensic audit of UX, payments,
-              security, and more — in minutes.
+              security, and more. In minutes.
             </p>
             <div className="mt-10 flex flex-col items-center gap-3">
               <Link
