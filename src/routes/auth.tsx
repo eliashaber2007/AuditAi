@@ -52,6 +52,20 @@ function AuthPage() {
     }
   };
 
+  const handleForgotPassword = async () => {
+    const target = window.prompt("Enter your email to receive a reset link:", email);
+    if (!target) return;
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(target, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) throw error;
+      toast.success("Password reset email sent.");
+    } catch (err: any) {
+      toast.error(err?.message ?? "Failed to send reset email");
+    }
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-white text-neutral-900">
       <header className="border-b border-neutral-100 px-6 py-4">
@@ -81,7 +95,18 @@ function AuthPage() {
               />
             </div>
             <div>
-              <label className="mb-1.5 block text-sm font-medium">Password</label>
+              <div className="mb-1.5 flex items-center justify-between">
+                <label className="block text-sm font-medium">Password</label>
+                {mode === "login" && (
+                  <button
+                    type="button"
+                    onClick={handleForgotPassword}
+                    className="text-xs font-medium text-neutral-600 hover:text-neutral-900 underline"
+                  >
+                    Forgot password?
+                  </button>
+                )}
+              </div>
               <input
                 type="password"
                 value={password}
