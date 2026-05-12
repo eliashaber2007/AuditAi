@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
-import { createClient } from "@supabase/supabase-js";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import type { Report } from "./qa-storage";
 
 export interface AuditInput {
@@ -82,8 +83,26 @@ function repairTruncatedJson(input: string): string | null {
 }
 
 export const runAudit = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: AuditInput) => data)
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    const userId = context.userId;
+
+    // Atomic credit check + deduct
+    const { data: creditRow } = await supabaseAdmin
+      .from("user_credits")
+      .select("credits")
+      .eq("user_id", userId)
+      .maybeSingle();
+    const current = creditRow?.credits ?? 0;
+    if (current <= 0) {
+      throw new Error("NO_CREDITS");
+    }
+    const { error: deductError } = await supabaseAdmin
+      .from("user_credits")
+      .upsert({ user_id: userId, credits: current - 1, updated_at: new Date().toISOString() });
+    if (deductError) throw new Error(`Failed to deduct credit: ${deductError.message}`);
+
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) throw new Error("ANTHROPIC_API_KEY is not configured on the server.");
 
