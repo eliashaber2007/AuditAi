@@ -36,6 +36,7 @@ function AuditPage() {
   const [instructionInput, setInstructionInput] = useState("");
   const [apiKey, setApiKeyState] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errorText, setErrorText] = useState<string | null>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem("qa-anthropic-key");
