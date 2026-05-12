@@ -145,6 +145,7 @@ function AuthPage() {
           </p>
         </div>
       </main>
+      <SiteFooter />
     </div>
   );
 }
