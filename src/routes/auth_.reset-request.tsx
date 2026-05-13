@@ -27,7 +27,6 @@ function ResetRequestPage() {
   const { error: searchError } = Route.useSearch();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => { if (searchError) toast.error(searchError); }, [searchError]);
 
@@ -35,19 +34,15 @@ function ResetRequestPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      // Fire-and-forget: always show neutral confirmation regardless of result
-      // (prevents email enumeration and avoids confusing users on rate-limit / unknown-email).
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/reset-password`,
       });
-      if (error) {
-        // Log for diagnostics but don't surface to the user
-        console.warn("[reset-request] resetPasswordForEmail error:", error.message);
-      }
+      if (error) throw error;
+      toast.success(t("user.resetSent") || "Password reset email sent. Check your inbox.");
+      navigate({ to: "/auth", search: { msg: t("user.resetSent") || "Password reset email sent. Check your inbox." } });
     } catch (err: any) {
-      console.warn("[reset-request] unexpected error:", err?.message);
+      toast.error(err?.message ?? "Could not send reset email.");
     } finally {
-      setSubmitted(true);
       setLoading(false);
     }
   };
@@ -71,40 +66,25 @@ function ResetRequestPage() {
               {searchError}
             </div>
           )}
-          {submitted ? (
-            <div className="mt-8 space-y-4">
-              <div role="status" className="rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-                If an account exists with this email, a reset link has been sent. Please check your inbox (and spam folder).
-              </div>
-              <button
-                type="button"
-                onClick={() => { setSubmitted(false); setEmail(""); }}
-                className="w-full rounded-md border border-neutral-200 bg-white px-6 py-2.5 text-sm font-medium text-neutral-900 transition-colors hover:bg-neutral-50"
-              >
-                Send to a different email
-              </button>
+          <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+            <div>
+              <label className="mb-1.5 block text-sm font-medium">{t("common.email") || "Email"}</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm outline-none focus:border-neutral-400"
+              />
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-              <div>
-                <label className="mb-1.5 block text-sm font-medium">{t("common.email") || "Email"}</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm outline-none focus:border-neutral-400"
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full rounded-md bg-neutral-900 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-neutral-800 disabled:opacity-50"
-              >
-                {loading ? (t("common.pleaseWait") || "Please wait…") : "Send reset link"}
-              </button>
-            </form>
-          )}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-md bg-neutral-900 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-neutral-800 disabled:opacity-50"
+            >
+              {loading ? (t("common.pleaseWait") || "Please wait…") : "Send reset link"}
+            </button>
+          </form>
           <p className="mt-6 text-center text-sm text-neutral-600">
             <Link to="/auth" className="font-medium text-neutral-900 underline">
               Back to sign in
