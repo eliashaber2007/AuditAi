@@ -8,6 +8,7 @@ import { useCredits } from "@/hooks/use-credits";
 import { UserMenu } from "@/components/UserMenu";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SiteFooter } from "@/components/SiteFooter";
+import { History } from "lucide-react";
 
 export const Route = createFileRoute("/history")({
   head: () => ({
@@ -42,9 +43,14 @@ function HistoryPage() {
       <header className="border-b border-neutral-100 px-6 py-4">
         <div className="mx-auto flex max-w-4xl items-center justify-between">
           <Link to="/" className="text-[22px] font-bold tracking-tight">Audit.ai</Link>
-          <div className="flex items-center gap-3">
-            <Link to="/history" className="text-sm font-medium text-neutral-700 hover:text-neutral-900">{t("nav.myAudits")}</Link>
-            <Link to="/pricing" className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium tabular-nums text-neutral-700 hover:bg-neutral-200">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link to="/history" aria-label={t("nav.myAudits")}
+              className="hidden md:inline text-sm font-medium text-neutral-700 hover:text-neutral-900">{t("nav.myAudits")}</Link>
+            <Link to="/history" aria-label={t("nav.myAudits")}
+              className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-md text-neutral-700 hover:bg-neutral-100">
+              <History className="h-5 w-5" />
+            </Link>
+            <Link to="/pricing" className="hidden md:inline-flex rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium tabular-nums text-neutral-700 hover:bg-neutral-200">
               {t("common.credits", { count: credits ?? 0 })}
             </Link>
             <LanguageSwitcher />
