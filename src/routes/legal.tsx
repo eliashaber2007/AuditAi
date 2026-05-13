@@ -4,7 +4,14 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SiteFooter } from "@/components/SiteFooter";
 
 export const Route = createFileRoute("/legal")({
-  head: () => ({ meta: [{ title: "Mentions légales — Audit.ai" }] }),
+  head: () => ({
+    meta: [
+      { title: "Mentions légales — Audit.ai" },
+      { name: "description", content: "Legal information for Audit.ai — publisher, hosting, and contact details." },
+      { property: "og:title", content: "Mentions légales — Audit.ai" },
+      { property: "og:description", content: "Legal information for Audit.ai — publisher, hosting, and contact details." },
+    ],
+  }),
   component: LegalPage,
 });
 

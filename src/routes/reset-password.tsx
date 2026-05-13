@@ -7,7 +7,14 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SiteFooter } from "@/components/SiteFooter";
 
 export const Route = createFileRoute("/reset-password")({
-  head: () => ({ meta: [{ title: "Reset password — Audit.ai" }] }),
+  head: () => ({
+    meta: [
+      { title: "Reset password — Audit.ai" },
+      { name: "description", content: "Set a new password for your Audit.ai account." },
+      { property: "og:title", content: "Reset password — Audit.ai" },
+      { property: "og:description", content: "Set a new password for your Audit.ai account." },
+    ],
+  }),
   component: ResetPasswordPage,
 });
 

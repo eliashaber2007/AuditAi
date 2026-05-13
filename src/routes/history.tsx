@@ -10,7 +10,14 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SiteFooter } from "@/components/SiteFooter";
 
 export const Route = createFileRoute("/history")({
-  head: () => ({ meta: [{ title: "My audits — Audit.ai" }] }),
+  head: () => ({
+    meta: [
+      { title: "My audits — Audit.ai" },
+      { name: "description", content: "Browse all of your past Audit.ai product audit reports." },
+      { property: "og:title", content: "My audits — Audit.ai" },
+      { property: "og:description", content: "Browse all of your past Audit.ai product audit reports." },
+    ],
+  }),
   component: HistoryPage,
 });
 

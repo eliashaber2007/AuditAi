@@ -10,7 +10,14 @@ export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>) => ({
     msg: typeof s.msg === "string" ? s.msg : undefined,
   }),
-  head: () => ({ meta: [{ title: "Sign in — Audit.ai" }] }),
+  head: () => ({
+    meta: [
+      { title: "Sign in — Audit.ai" },
+      { name: "description", content: "Sign in or create your Audit.ai account to start generating product audits." },
+      { property: "og:title", content: "Sign in — Audit.ai" },
+      { property: "og:description", content: "Sign in or create your Audit.ai account to start generating product audits." },
+    ],
+  }),
   component: AuthPage,
 });
 
