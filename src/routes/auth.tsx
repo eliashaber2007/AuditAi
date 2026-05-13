@@ -9,6 +9,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>) => ({
     msg: typeof s.msg === "string" ? s.msg : undefined,
+    error: typeof s.error === "string" ? s.error : undefined,
   }),
   head: () => ({
     meta: [
