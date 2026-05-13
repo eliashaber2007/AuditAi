@@ -148,7 +148,7 @@ function AuditPage() {
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-3xl px-6 py-12">
+      <main className="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-12">
         <h1 className="text-center text-3xl font-semibold tracking-tight">{t("audit.title")}</h1>
         <p className="mt-2 text-center text-sm text-neutral-600">{t("audit.sub")}</p>
 
