@@ -10,7 +10,14 @@ export const Route = createFileRoute("/success")({
   validateSearch: (s: Record<string, unknown>) => ({
     session_id: typeof s.session_id === "string" ? s.session_id : undefined,
   }),
-  head: () => ({ meta: [{ title: "Payment success — Audit.ai" }] }),
+  head: () => ({
+    meta: [
+      { title: "Payment success — Audit.ai" },
+      { name: "description", content: "Your Audit.ai credits have been added to your account." },
+      { property: "og:title", content: "Payment success — Audit.ai" },
+      { property: "og:description", content: "Your Audit.ai credits have been added to your account." },
+    ],
+  }),
   component: SuccessPage,
 });
 

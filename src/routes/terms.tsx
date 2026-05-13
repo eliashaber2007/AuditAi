@@ -4,7 +4,14 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SiteFooter } from "@/components/SiteFooter";
 
 export const Route = createFileRoute("/terms")({
-  head: () => ({ meta: [{ title: "Terms of Service — Audit.ai" }] }),
+  head: () => ({
+    meta: [
+      { title: "Terms of Service — Audit.ai" },
+      { name: "description", content: "Terms governing your use of Audit.ai." },
+      { property: "og:title", content: "Terms of Service — Audit.ai" },
+      { property: "og:description", content: "Terms governing your use of Audit.ai." },
+    ],
+  }),
   component: TermsPage,
 });
 

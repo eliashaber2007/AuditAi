@@ -4,7 +4,14 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SiteFooter } from "@/components/SiteFooter";
 
 export const Route = createFileRoute("/privacy")({
-  head: () => ({ meta: [{ title: "Privacy Policy — Audit.ai" }] }),
+  head: () => ({
+    meta: [
+      { title: "Privacy Policy — Audit.ai" },
+      { name: "description", content: "How Audit.ai collects, processes, and protects your data." },
+      { property: "og:title", content: "Privacy Policy — Audit.ai" },
+      { property: "og:description", content: "How Audit.ai collects, processes, and protects your data." },
+    ],
+  }),
   component: PrivacyPage,
 });
 

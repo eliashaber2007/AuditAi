@@ -10,7 +10,14 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SiteFooter } from "@/components/SiteFooter";
 
 export const Route = createFileRoute("/results/$id")({
-  head: () => ({ meta: [{ title: "Audit results — Audit.ai" }] }),
+  head: () => ({
+    meta: [
+      { title: "Audit results — Audit.ai" },
+      { name: "description", content: "Your AI-generated product audit report from Audit.ai." },
+      { property: "og:title", content: "Audit results — Audit.ai" },
+      { property: "og:description", content: "Your AI-generated product audit report from Audit.ai." },
+    ],
+  }),
   component: ResultsPage,
 });
 

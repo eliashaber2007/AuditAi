@@ -5,7 +5,14 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export const Route = createFileRoute("/faq")({
-  head: () => ({ meta: [{ title: "FAQ — Audit.ai" }] }),
+  head: () => ({
+    meta: [
+      { title: "FAQ — Audit.ai" },
+      { name: "description", content: "Frequently asked questions about Audit.ai — credits, accuracy, data safety, and more." },
+      { property: "og:title", content: "FAQ — Audit.ai" },
+      { property: "og:description", content: "Frequently asked questions about Audit.ai — credits, accuracy, data safety, and more." },
+    ],
+  }),
   component: FaqPage,
 });
 
