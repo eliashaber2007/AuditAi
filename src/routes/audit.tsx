@@ -9,6 +9,7 @@ import { useCredits } from "@/hooks/use-credits";
 import { UserMenu } from "@/components/UserMenu";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SiteFooter } from "@/components/SiteFooter";
+import { History } from "lucide-react";
 
 export const Route = createFileRoute("/audit")({
   head: () => ({
