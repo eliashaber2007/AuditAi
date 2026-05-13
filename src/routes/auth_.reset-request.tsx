@@ -27,6 +27,7 @@ function ResetRequestPage() {
   const { error: searchError } = Route.useSearch();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => { if (searchError) toast.error(searchError); }, [searchError]);
 
@@ -34,15 +35,19 @@ function ResetRequestPage() {
     e.preventDefault();
     setLoading(true);
     try {
+      // Fire-and-forget: always show neutral confirmation regardless of result
+      // (prevents email enumeration and avoids confusing users on rate-limit / unknown-email).
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/reset-password`,
       });
-      if (error) throw error;
-      toast.success(t("user.resetSent") || "Password reset email sent. Check your inbox.");
-      navigate({ to: "/auth", search: { msg: t("user.resetSent") || "Password reset email sent. Check your inbox." } });
+      if (error) {
+        // Log for diagnostics but don't surface to the user
+        console.warn("[reset-request] resetPasswordForEmail error:", error.message);
+      }
     } catch (err: any) {
-      toast.error(err?.message ?? "Could not send reset email.");
+      console.warn("[reset-request] unexpected error:", err?.message);
     } finally {
+      setSubmitted(true);
       setLoading(false);
     }
   };
