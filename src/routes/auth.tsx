@@ -1,20 +1,21 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SiteFooter } from "@/components/SiteFooter";
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>) => ({
     msg: typeof s.msg === "string" ? s.msg : undefined,
   }),
-  head: () => ({
-    meta: [{ title: "Sign in — Audit.ai" }],
-  }),
+  head: () => ({ meta: [{ title: "Sign in — Audit.ai" }] }),
   component: AuthPage,
 });
 
 function AuthPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { msg } = Route.useSearch();
   const [mode, setMode] = useState<"login" | "signup">("login");
@@ -22,9 +23,7 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (msg) toast.success(msg);
-  }, [msg]);
+  useEffect(() => { if (msg) toast.success(msg); }, [msg]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -38,40 +37,36 @@ function AuthPage() {
     try {
       if (mode === "signup") {
         const { error } = await supabase.auth.signUp({
-          email,
-          password,
+          email, password,
           options: { emailRedirectTo: `${window.location.origin}/audit` },
         });
         if (error) throw error;
         const { data } = await supabase.auth.getSession();
-        if (data.session) {
-          navigate({ to: "/audit" });
-        } else {
-          toast.success("Check your email to confirm your account.");
-        }
+        if (data.session) navigate({ to: "/audit" });
+        else toast.success(t("auth.checkEmail"));
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         navigate({ to: "/audit" });
       }
     } catch (err: any) {
-      toast.error(err?.message ?? "Authentication failed");
+      toast.error(err?.message ?? t("auth.failed"));
     } finally {
       setLoading(false);
     }
   };
 
   const handleForgotPassword = async () => {
-    const target = window.prompt("Enter your email to receive a reset link:", email);
+    const target = window.prompt(t("auth.resetPrompt"), email);
     if (!target) return;
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(target, {
         redirectTo: `${window.location.origin}/reset-password`,
       });
       if (error) throw error;
-      toast.success("Password reset email sent.");
+      toast.success(t("user.resetSent"));
     } catch (err: any) {
-      toast.error(err?.message ?? "Failed to send reset email");
+      toast.error(err?.message ?? t("user.resetFailed"));
     }
   };
 
@@ -82,65 +77,46 @@ function AuthPage() {
           <Link to="/" className="text-[22px] font-bold tracking-tight text-neutral-900">
             Audit<span className="text-emerald-500">.ai</span>
           </Link>
+          <LanguageSwitcher />
         </div>
       </header>
       <main className="flex flex-1 items-center justify-center px-6 py-12">
         <div className="w-full max-w-sm">
           <h1 className="text-2xl font-semibold tracking-tight">
-            {mode === "login" ? "Welcome back" : "Create your account"}
+            {mode === "login" ? t("auth.welcomeBack") : t("auth.createAccount")}
           </h1>
           <p className="mt-2 text-sm text-neutral-600">
-            {mode === "login" ? "Sign in to run audits." : "Sign up to start auditing."}
+            {mode === "login" ? t("auth.signInToRun") : t("auth.signUpToStart")}
           </p>
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">
             <div>
-              <label className="mb-1.5 block text-sm font-medium">Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm outline-none focus:border-neutral-400"
-              />
+              <label className="mb-1.5 block text-sm font-medium">{t("common.email")}</label>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required
+                className="w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm outline-none focus:border-neutral-400" />
             </div>
             <div>
               <div className="mb-1.5 flex items-center justify-between">
-                <label className="block text-sm font-medium">Password</label>
+                <label className="block text-sm font-medium">{t("common.password")}</label>
                 {mode === "login" && (
-                  <button
-                    type="button"
-                    onClick={handleForgotPassword}
-                    className="text-xs font-medium text-neutral-600 hover:text-neutral-900 underline"
-                  >
-                    Forgot password?
+                  <button type="button" onClick={handleForgotPassword}
+                    className="text-xs font-medium text-neutral-600 hover:text-neutral-900 underline">
+                    {t("auth.forgot")}
                   </button>
                 )}
               </div>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-                className="w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm outline-none focus:border-neutral-400"
-              />
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6}
+                className="w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm outline-none focus:border-neutral-400" />
             </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full rounded-md bg-neutral-900 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-neutral-800 disabled:opacity-50"
-            >
-              {loading ? "Please wait..." : mode === "login" ? "Sign in" : "Sign up"}
+            <button type="submit" disabled={loading}
+              className="w-full rounded-md bg-neutral-900 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-neutral-800 disabled:opacity-50">
+              {loading ? t("common.pleaseWait") : mode === "login" ? t("common.signIn") : t("common.signUp")}
             </button>
           </form>
           <p className="mt-6 text-center text-sm text-neutral-600">
-            {mode === "login" ? "No account?" : "Already have one?"}{" "}
-            <button
-              type="button"
-              onClick={() => setMode(mode === "login" ? "signup" : "login")}
-              className="font-medium text-neutral-900 underline"
-            >
-              {mode === "login" ? "Sign up" : "Sign in"}
+            {mode === "login" ? t("auth.noAccount") : t("auth.alreadyHave")}{" "}
+            <button type="button" onClick={() => setMode(mode === "login" ? "signup" : "login")}
+              className="font-medium text-neutral-900 underline">
+              {mode === "login" ? t("common.signUp") : t("common.signIn")}
             </button>
           </p>
         </div>

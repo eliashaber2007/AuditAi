@@ -1,5 +1,6 @@
 import { useNavigate, Link } from "@tanstack/react-router";
 import { useState, useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -8,6 +9,7 @@ import { useCredits } from "@/hooks/use-credits";
 type Variant = "light" | "dark";
 
 export function UserMenu({ variant = "light" }: { variant?: Variant }) {
+  const { t } = useTranslation();
   const { user, loading } = useAuth();
   const { credits } = useCredits();
   const navigate = useNavigate();
@@ -31,7 +33,7 @@ export function UserMenu({ variant = "light" }: { variant?: Variant }) {
         : "rounded-md border border-neutral-200 px-3 py-1.5 text-sm font-medium hover:bg-neutral-50";
     return (
       <Link to="/auth" className={loginCls}>
-        Log in
+        {t("common.logIn")}
       </Link>
     );
   }
@@ -49,9 +51,9 @@ export function UserMenu({ variant = "light" }: { variant?: Variant }) {
         redirectTo: `${window.location.origin}/reset-password`,
       });
       if (error) throw error;
-      toast.success("Password reset email sent.");
+      toast.success(t("user.resetSent"));
     } catch (err: any) {
-      toast.error(err?.message ?? "Failed to send reset email");
+      toast.error(err?.message ?? t("user.resetFailed"));
     }
     setOpen(false);
   };
@@ -87,27 +89,27 @@ export function UserMenu({ variant = "light" }: { variant?: Variant }) {
       <button
         onClick={() => setOpen((o) => !o)}
         className={avatarCls}
-        aria-label="User menu"
+        aria-label={t("user.menuAria")}
       >
         {initial}
       </button>
       {open && (
         <div className={menuCls}>
           <div className="px-3 py-2">
-            <div className={headerSubCls}>Signed in as</div>
+            <div className={headerSubCls}>{t("user.signedInAs")}</div>
             <div className={headerEmailCls}>{user.email}</div>
           </div>
           <div className={dividerCls} />
           <div className={creditsCls}>
-            <span>Credits</span>
+            <span>{t("user.credits")}</span>
             <span className={creditsValueCls}>{credits ?? "—"}</span>
           </div>
           <div className={dividerCls} />
           <button onClick={handleChangePassword} className={itemCls}>
-            Change password
+            {t("user.changePassword")}
           </button>
           <button onClick={handleLogout} className={itemCls}>
-            Sign out
+            {t("common.signOut")}
           </button>
         </div>
       )}
