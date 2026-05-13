@@ -10,6 +10,10 @@ export const Route = createFileRoute("/legal")({
       { name: "description", content: "Legal information for Audit.ai — publisher, hosting, and contact details." },
       { property: "og:title", content: "Mentions légales — Audit.ai" },
       { property: "og:description", content: "Legal information for Audit.ai — publisher, hosting, and contact details." },
+      { property: "og:url", content: "https://tryauditai.com/legal" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://tryauditai.com/legal" },
     ],
   }),
   component: LegalPage,

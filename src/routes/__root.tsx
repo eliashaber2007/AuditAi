@@ -79,8 +79,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "author", content: "Audit.ai" },
       { property: "og:title", content: "Audit.ai — Find every flaw before your users do" },
       { property: "og:description", content: "AI-powered product analysis. Describe your product, get a full audit report in minutes. Used by founders and indie developers pre-launch." },
-      { property: "og:url", content: "https://tryauditai.com" },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Audit.ai" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Audit.ai — Find every flaw before your users do" },
       { name: "twitter:description", content: "AI-powered product analysis. Describe your product, get a full audit report in minutes. Used by founders and indie developers pre-launch." },
@@ -94,7 +94,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "icon", type: "image/png", href: "/favicon.png" },
       { rel: "apple-touch-icon", href: "/favicon.png" },
-      { rel: "canonical", href: "https://tryauditai.com" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Audit.ai",
+          url: "https://tryauditai.com",
+          logo: "https://tryauditai.com/favicon.png",
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Audit.ai",
+          url: "https://tryauditai.com",
+        }),
+      },
     ],
   }),
   shellComponent: RootShell,
