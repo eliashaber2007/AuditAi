@@ -19,10 +19,6 @@ export const Route = createFileRoute("/pricing")({
       { name: "description", content: "Simple credit-based pricing. One credit = one full AI product audit. From €1.25 per audit." },
       { property: "og:title", content: "Pricing — Audit.ai" },
       { property: "og:description", content: "Simple credit-based pricing. One credit = one full AI product audit. From €1.25 per audit." },
-      { property: "og:url", content: "https://tryauditai.com/pricing" },
-    ],
-    links: [
-      { rel: "canonical", href: "https://tryauditai.com/pricing" },
     ],
   }),
   component: PricingPage,

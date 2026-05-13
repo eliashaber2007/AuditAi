@@ -7,13 +7,9 @@ export const Route = createFileRoute("/terms")({
   head: () => ({
     meta: [
       { title: "Terms of Service — Audit.ai" },
-      { name: "description", content: "Terms of Service for Audit.ai — your rights, responsibilities, refund policy, and how we deliver AI-powered product audit reports." },
+      { name: "description", content: "Terms governing your use of Audit.ai." },
       { property: "og:title", content: "Terms of Service — Audit.ai" },
-      { property: "og:description", content: "Terms of Service for Audit.ai — your rights, responsibilities, refund policy, and how we deliver AI-powered product audit reports." },
-      { property: "og:url", content: "https://tryauditai.com/terms" },
-    ],
-    links: [
-      { rel: "canonical", href: "https://tryauditai.com/terms" },
+      { property: "og:description", content: "Terms governing your use of Audit.ai." },
     ],
   }),
   component: TermsPage,

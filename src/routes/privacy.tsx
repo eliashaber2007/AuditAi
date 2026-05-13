@@ -10,10 +10,6 @@ export const Route = createFileRoute("/privacy")({
       { name: "description", content: "How Audit.ai collects, processes, and protects your data." },
       { property: "og:title", content: "Privacy Policy — Audit.ai" },
       { property: "og:description", content: "How Audit.ai collects, processes, and protects your data." },
-      { property: "og:url", content: "https://tryauditai.com/privacy" },
-    ],
-    links: [
-      { rel: "canonical", href: "https://tryauditai.com/privacy" },
     ],
   }),
   component: PrivacyPage,
