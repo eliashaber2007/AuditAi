@@ -238,7 +238,7 @@ function AuditPage() {
                 <p className="mt-4 text-xs text-neutral-500">{t("audit.thinkingNote")}</p>
               </div>
             ) : (
-              <button type="submit" className="inline-flex items-center justify-center gap-3 rounded-md bg-neutral-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800">
+              <button type="submit" className="inline-flex w-full sm:w-auto items-center justify-center gap-3 rounded-md bg-neutral-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800">
                 {t("audit.run")}
               </button>
             )}
