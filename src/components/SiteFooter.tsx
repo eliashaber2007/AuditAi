@@ -25,6 +25,7 @@ export function SiteFooter({ variant = "light" }: { variant?: Variant }) {
         </div>
         <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
           <Link to="/pricing" className={linkCls}>Pricing</Link>
+          <Link to="/faq" className={linkCls}>FAQ</Link>
           <Link to="/terms" className={linkCls}>Terms</Link>
           <Link to="/privacy" className={linkCls}>Privacy</Link>
           <Link to="/legal" className={linkCls}>Legal</Link>
