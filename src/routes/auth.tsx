@@ -9,6 +9,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>) => ({
     msg: typeof s.msg === "string" ? s.msg : undefined,
+    error: typeof s.error === "string" ? s.error : undefined,
   }),
   head: () => ({
     meta: [
@@ -24,13 +25,14 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { msg } = Route.useSearch();
+  const { msg, error: searchError } = Route.useSearch();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => { if (msg) toast.success(msg); }, [msg]);
+  useEffect(() => { if (searchError) toast.error(searchError); }, [searchError]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -95,6 +97,16 @@ function AuthPage() {
           <p className="mt-2 text-sm text-neutral-600">
             {mode === "login" ? t("auth.signInToRun") : t("auth.signUpToStart")}
           </p>
+          {searchError && (
+            <div role="alert" className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+              {searchError}
+            </div>
+          )}
+          {msg && (
+            <div role="status" className="mt-4 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+              {msg}
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">
             <div>
               <label className="mb-1.5 block text-sm font-medium">{t("common.email")}</label>

@@ -21,6 +21,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuditRouteImport } from './routes/audit'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ResultsIdRouteImport } from './routes/results.$id'
+import { Route as AuthResetRequestRouteImport } from './routes/auth_.reset-request'
 import { Route as ApiStripeWebhookRouteImport } from './routes/api/stripe-webhook'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 
@@ -84,6 +85,11 @@ const ResultsIdRoute = ResultsIdRouteImport.update({
   path: '/results/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthResetRequestRoute = AuthResetRequestRouteImport.update({
+  id: '/auth_/reset-request',
+  path: '/auth/reset-request',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiStripeWebhookRoute = ApiStripeWebhookRouteImport.update({
   id: '/api/stripe-webhook',
   path: '/api/stripe-webhook',
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/success': typeof SuccessRoute
   '/terms': typeof TermsRoute
   '/api/stripe-webhook': typeof ApiStripeWebhookRoute
+  '/auth/reset-request': typeof AuthResetRequestRoute
   '/results/$id': typeof ResultsIdRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/success': typeof SuccessRoute
   '/terms': typeof TermsRoute
   '/api/stripe-webhook': typeof ApiStripeWebhookRoute
+  '/auth/reset-request': typeof AuthResetRequestRoute
   '/results/$id': typeof ResultsIdRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/success': typeof SuccessRoute
   '/terms': typeof TermsRoute
   '/api/stripe-webhook': typeof ApiStripeWebhookRoute
+  '/auth_/reset-request': typeof AuthResetRequestRoute
   '/results/$id': typeof ResultsIdRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
@@ -159,6 +168,7 @@ export interface FileRouteTypes {
     | '/success'
     | '/terms'
     | '/api/stripe-webhook'
+    | '/auth/reset-request'
     | '/results/$id'
     | '/api/public/stripe-webhook'
   fileRoutesByTo: FileRoutesByTo
@@ -175,6 +185,7 @@ export interface FileRouteTypes {
     | '/success'
     | '/terms'
     | '/api/stripe-webhook'
+    | '/auth/reset-request'
     | '/results/$id'
     | '/api/public/stripe-webhook'
   id:
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
     | '/success'
     | '/terms'
     | '/api/stripe-webhook'
+    | '/auth_/reset-request'
     | '/results/$id'
     | '/api/public/stripe-webhook'
   fileRoutesById: FileRoutesById
@@ -208,6 +220,7 @@ export interface RootRouteChildren {
   SuccessRoute: typeof SuccessRoute
   TermsRoute: typeof TermsRoute
   ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
+  AuthResetRequestRoute: typeof AuthResetRequestRoute
   ResultsIdRoute: typeof ResultsIdRoute
   ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
 }
@@ -298,6 +311,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResultsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth_/reset-request': {
+      id: '/auth_/reset-request'
+      path: '/auth/reset-request'
+      fullPath: '/auth/reset-request'
+      preLoaderRoute: typeof AuthResetRequestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/stripe-webhook': {
       id: '/api/stripe-webhook'
       path: '/api/stripe-webhook'
@@ -328,6 +348,7 @@ const rootRouteChildren: RootRouteChildren = {
   SuccessRoute: SuccessRoute,
   TermsRoute: TermsRoute,
   ApiStripeWebhookRoute: ApiStripeWebhookRoute,
+  AuthResetRequestRoute: AuthResetRequestRoute,
   ResultsIdRoute: ResultsIdRoute,
   ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
 }
