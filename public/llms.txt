@@ -1,0 +1,17 @@
+# Audit.ai
+
+> AI-powered product analysis. Describe your product, get a full audit report in minutes. Used by founders and indie developers pre-launch.
+
+Audit.ai generates structured quality reports covering UX, payments, security, and more from your product description. Each audit is one credit; pricing starts at €1.25 per audit.
+
+## Pages
+
+- [Home](/): Overview of Audit.ai and how the audit flow works.
+- [Pricing](/pricing): Credit-based pricing plans, from €1.25 per audit.
+- [FAQ](/faq): Common questions about credits, accuracy, and data safety.
+
+## Optional
+
+- [Terms of Service](/terms): Terms governing use of Audit.ai.
+- [Privacy Policy](/privacy): How we collect, process, and protect your data.
+- [Legal Notice](/legal): Publisher, hosting, and contact details.
