@@ -25,13 +25,14 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { msg } = Route.useSearch();
+  const { msg, error: searchError } = Route.useSearch();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => { if (msg) toast.success(msg); }, [msg]);
+  useEffect(() => { if (searchError) toast.error(searchError); }, [searchError]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
