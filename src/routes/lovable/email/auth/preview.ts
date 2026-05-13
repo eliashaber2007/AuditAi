@@ -18,7 +18,7 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
 }
 
 // Configuration
-const SITE_NAME = "q-a-genius-bot"
+const SITE_NAME = "Audit.ai"
 const ROOT_DOMAIN = "tryauditai.com"
 
 // Sample data for preview mode ONLY (not used in actual email sending).

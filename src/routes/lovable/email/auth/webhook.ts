@@ -31,7 +31,7 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
 }
 
 // Configuration
-const SITE_NAME = "q-a-genius-bot"
+const SITE_NAME = "Audit.ai"
 const SENDER_DOMAIN = "mail.tryauditai.com"
 const ROOT_DOMAIN = "tryauditai.com"
 const FROM_DOMAIN = "mail.tryauditai.com"
