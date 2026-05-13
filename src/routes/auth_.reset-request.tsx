@@ -71,25 +71,40 @@ function ResetRequestPage() {
               {searchError}
             </div>
           )}
-          <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-            <div>
-              <label className="mb-1.5 block text-sm font-medium">{t("common.email") || "Email"}</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm outline-none focus:border-neutral-400"
-              />
+          {submitted ? (
+            <div className="mt-8 space-y-4">
+              <div role="status" className="rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+                If an account exists with this email, a reset link has been sent. Please check your inbox (and spam folder).
+              </div>
+              <button
+                type="button"
+                onClick={() => { setSubmitted(false); setEmail(""); }}
+                className="w-full rounded-md border border-neutral-200 bg-white px-6 py-2.5 text-sm font-medium text-neutral-900 transition-colors hover:bg-neutral-50"
+              >
+                Send to a different email
+              </button>
             </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full rounded-md bg-neutral-900 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-neutral-800 disabled:opacity-50"
-            >
-              {loading ? (t("common.pleaseWait") || "Please wait…") : "Send reset link"}
-            </button>
-          </form>
+          ) : (
+            <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+              <div>
+                <label className="mb-1.5 block text-sm font-medium">{t("common.email") || "Email"}</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm outline-none focus:border-neutral-400"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-md bg-neutral-900 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-neutral-800 disabled:opacity-50"
+              >
+                {loading ? (t("common.pleaseWait") || "Please wait…") : "Send reset link"}
+              </button>
+            </form>
+          )}
           <p className="mt-6 text-center text-sm text-neutral-600">
             <Link to="/auth" className="font-medium text-neutral-900 underline">
               Back to sign in
