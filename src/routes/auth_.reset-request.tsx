@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -23,10 +23,12 @@ export const Route = createFileRoute("/auth_/reset-request")({
 
 function ResetRequestPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { error: searchError } = Route.useSearch();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [confirmation, setConfirmation] = useState<string | null>(null);
+
+  const genericConfirmation = "If an account exists with this email, a reset link has been sent";
 
   useEffect(() => { if (searchError) toast.error(searchError); }, [searchError]);
 
@@ -37,11 +39,15 @@ function ResetRequestPage() {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/reset-password`,
       });
-      if (error) throw error;
-      toast.success(t("user.resetSent") || "Password reset email sent. Check your inbox.");
-      navigate({ to: "/auth", search: { msg: t("user.resetSent") || "Password reset email sent. Check your inbox." } });
+      if (error) {
+        console.error("Password reset request failed", error);
+      }
+      setConfirmation(genericConfirmation);
+      toast.success(genericConfirmation);
     } catch (err: any) {
-      toast.error(err?.message ?? "Could not send reset email.");
+      console.error("Password reset request failed", err);
+      setConfirmation(genericConfirmation);
+      toast.success(genericConfirmation);
     } finally {
       setLoading(false);
     }
@@ -64,6 +70,11 @@ function ResetRequestPage() {
           {searchError && (
             <div role="alert" className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
               {searchError}
+            </div>
+          )}
+          {confirmation && (
+            <div role="status" className="mt-4 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+              {confirmation}
             </div>
           )}
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">

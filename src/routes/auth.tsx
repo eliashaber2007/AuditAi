@@ -30,6 +30,9 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [resetConfirmation, setResetConfirmation] = useState<string | null>(null);
+
+  const genericResetConfirmation = "If an account exists with this email, a reset link has been sent";
 
   useEffect(() => { if (msg) toast.success(msg); }, [msg]);
   useEffect(() => { if (searchError) toast.error(searchError); }, [searchError]);
@@ -72,10 +75,15 @@ function AuthPage() {
       const { error } = await supabase.auth.resetPasswordForEmail(target, {
         redirectTo: `${window.location.origin}/reset-password`,
       });
-      if (error) throw error;
-      toast.success(t("user.resetSent"));
+      if (error) {
+        console.error("Password reset request failed", error);
+      }
+      setResetConfirmation(genericResetConfirmation);
+      toast.success(genericResetConfirmation);
     } catch (err: any) {
-      toast.error(err?.message ?? t("user.resetFailed"));
+      console.error("Password reset request failed", err);
+      setResetConfirmation(genericResetConfirmation);
+      toast.success(genericResetConfirmation);
     }
   };
 
@@ -105,6 +113,11 @@ function AuthPage() {
           {msg && (
             <div role="status" className="mt-4 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
               {msg}
+            </div>
+          )}
+          {resetConfirmation && (
+            <div role="status" className="mt-4 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+              {resetConfirmation}
             </div>
           )}
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">
