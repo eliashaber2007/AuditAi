@@ -127,7 +127,7 @@ function AuditPage() {
 
   return (
     <div className="min-h-screen bg-white text-neutral-900">
-      <header className="border-b border-neutral-100 px-6 py-4">
+      <header className="border-b border-neutral-100 px-4 sm:px-6 py-4">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
           <Link to="/" className="text-[22px] font-bold tracking-tight">Audit.ai</Link>
           <div className="flex items-center gap-2 sm:gap-3">
