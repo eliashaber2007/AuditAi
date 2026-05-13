@@ -16,6 +16,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as HistoryRouteImport } from './routes/history'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuditRouteImport } from './routes/audit'
 import { Route as IndexRouteImport } from './routes/index'
@@ -58,6 +59,11 @@ const HistoryRoute = HistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -93,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
   '/auth': typeof AuthRoute
+  '/faq': typeof FaqRoute
   '/history': typeof HistoryRoute
   '/legal': typeof LegalRoute
   '/pricing': typeof PricingRoute
@@ -108,6 +115,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
   '/auth': typeof AuthRoute
+  '/faq': typeof FaqRoute
   '/history': typeof HistoryRoute
   '/legal': typeof LegalRoute
   '/pricing': typeof PricingRoute
@@ -124,6 +132,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
   '/auth': typeof AuthRoute
+  '/faq': typeof FaqRoute
   '/history': typeof HistoryRoute
   '/legal': typeof LegalRoute
   '/pricing': typeof PricingRoute
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/'
     | '/audit'
     | '/auth'
+    | '/faq'
     | '/history'
     | '/legal'
     | '/pricing'
@@ -156,6 +166,7 @@ export interface FileRouteTypes {
     | '/'
     | '/audit'
     | '/auth'
+    | '/faq'
     | '/history'
     | '/legal'
     | '/pricing'
@@ -171,6 +182,7 @@ export interface FileRouteTypes {
     | '/'
     | '/audit'
     | '/auth'
+    | '/faq'
     | '/history'
     | '/legal'
     | '/pricing'
@@ -187,6 +199,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuditRoute: typeof AuditRoute
   AuthRoute: typeof AuthRoute
+  FaqRoute: typeof FaqRoute
   HistoryRoute: typeof HistoryRoute
   LegalRoute: typeof LegalRoute
   PricingRoute: typeof PricingRoute
@@ -250,6 +263,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -299,6 +319,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuditRoute: AuditRoute,
   AuthRoute: AuthRoute,
+  FaqRoute: FaqRoute,
   HistoryRoute: HistoryRoute,
   LegalRoute: LegalRoute,
   PricingRoute: PricingRoute,
@@ -313,3 +334,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
