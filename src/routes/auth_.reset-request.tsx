@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -23,7 +23,6 @@ export const Route = createFileRoute("/auth_/reset-request")({
 
 function ResetRequestPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { error: searchError } = Route.useSearch();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
