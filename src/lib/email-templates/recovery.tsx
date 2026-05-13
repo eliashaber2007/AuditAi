@@ -75,3 +75,4 @@ const button = {
   textDecoration: 'none',
 }
 const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
+const link = { color: 'inherit', textDecoration: 'underline' }
