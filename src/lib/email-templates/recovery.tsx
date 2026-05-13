@@ -2,7 +2,6 @@ import * as React from 'react'
 
 import {
   Body,
-  Button,
   Container,
   Head,
   Heading,
@@ -31,20 +30,13 @@ export const RecoveryEmail = ({
           You requested a password reset for your Audit.ai account. Click the
           link below to choose a new password:
         </Text>
-        <Button style={button} href={confirmationUrl}>
-          Reset Password
-        </Button>
         <Text style={text}>
-          Or copy and paste this link into your browser:
-          <br />
           <Link href={confirmationUrl} style={link}>
             {confirmationUrl}
           </Link>
         </Text>
         <Text style={text}>This link expires in 24 hours.</Text>
-        <Text style={footer}>
-          If you didn't request this, ignore this email.
-        </Text>
+        <Text style={footer}>If you didn't request this, ignore this email.</Text>
       </Container>
     </Body>
   </Html>
@@ -66,13 +58,5 @@ const text = {
   lineHeight: '1.5',
   margin: '0 0 25px',
 }
-const button = {
-  backgroundColor: '#000000',
-  color: '#ffffff',
-  fontSize: '14px',
-  borderRadius: '8px',
-  padding: '12px 20px',
-  textDecoration: 'none',
-}
 const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
-const link = { color: 'inherit', textDecoration: 'underline' }
+const link = { color: '#000000', textDecoration: 'underline' }
