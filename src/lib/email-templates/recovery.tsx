@@ -7,6 +7,7 @@ import {
   Head,
   Heading,
   Html,
+  Link,
   Preview,
   Text,
 } from '@react-email/components'
@@ -17,25 +18,32 @@ interface RecoveryEmailProps {
 }
 
 export const RecoveryEmail = ({
-  siteName,
   confirmationUrl,
 }: RecoveryEmailProps) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>Reset your password for {siteName}</Preview>
+    <Preview>Reset your Audit.ai password</Preview>
     <Body style={main}>
       <Container style={container}>
         <Heading style={h1}>Reset your password</Heading>
+        <Text style={text}>Hi,</Text>
         <Text style={text}>
-          We received a request to reset your password for {siteName}. Click
-          the button below to choose a new password.
+          You requested a password reset for your Audit.ai account. Click the
+          link below to choose a new password:
         </Text>
         <Button style={button} href={confirmationUrl}>
           Reset Password
         </Button>
+        <Text style={text}>
+          Or copy and paste this link into your browser:
+          <br />
+          <Link href={confirmationUrl} style={link}>
+            {confirmationUrl}
+          </Link>
+        </Text>
+        <Text style={text}>This link expires in 24 hours.</Text>
         <Text style={footer}>
-          If you didn't request a password reset, you can safely ignore this
-          email. Your password will not be changed.
+          If you didn't request this, ignore this email.
         </Text>
       </Container>
     </Body>
