@@ -2,11 +2,11 @@ import * as React from 'react'
 
 import {
   Body,
-  Button,
   Container,
   Head,
   Heading,
   Html,
+  Link,
   Preview,
   Text,
 } from '@react-email/components'
@@ -17,26 +17,26 @@ interface RecoveryEmailProps {
 }
 
 export const RecoveryEmail = ({
-  siteName,
   confirmationUrl,
 }: RecoveryEmailProps) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>Reset your password for {siteName}</Preview>
+    <Preview>Reset your Audit.ai password</Preview>
     <Body style={main}>
       <Container style={container}>
         <Heading style={h1}>Reset your password</Heading>
+        <Text style={text}>Hi,</Text>
         <Text style={text}>
-          We received a request to reset your password for {siteName}. Click
-          the button below to choose a new password.
+          You requested a password reset for your Audit.ai account. Click the
+          link below to choose a new password:
         </Text>
-        <Button style={button} href={confirmationUrl}>
-          Reset Password
-        </Button>
-        <Text style={footer}>
-          If you didn't request a password reset, you can safely ignore this
-          email. Your password will not be changed.
+        <Text style={text}>
+          <Link href={confirmationUrl} style={link}>
+            {confirmationUrl}
+          </Link>
         </Text>
+        <Text style={text}>This link expires in 24 hours.</Text>
+        <Text style={footer}>If you didn't request this, ignore this email.</Text>
       </Container>
     </Body>
   </Html>
@@ -58,12 +58,5 @@ const text = {
   lineHeight: '1.5',
   margin: '0 0 25px',
 }
-const button = {
-  backgroundColor: '#000000',
-  color: '#ffffff',
-  fontSize: '14px',
-  borderRadius: '8px',
-  padding: '12px 20px',
-  textDecoration: 'none',
-}
 const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
+const link = { color: '#000000', textDecoration: 'underline' }
