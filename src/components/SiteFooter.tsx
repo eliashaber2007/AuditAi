@@ -1,8 +1,10 @@
 import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 type Variant = "light" | "dark";
 
 export function SiteFooter({ variant = "light" }: { variant?: Variant }) {
+  const { t } = useTranslation();
   const isDark = variant === "dark";
 
   const wrapperCls = isDark
@@ -24,13 +26,13 @@ export function SiteFooter({ variant = "light" }: { variant?: Variant }) {
           Audit<span className={accentCls}>.ai</span>
         </div>
         <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
-          <Link to="/pricing" className={linkCls}>Pricing</Link>
-          <Link to="/faq" className={linkCls}>FAQ</Link>
-          <Link to="/terms" className={linkCls}>Terms</Link>
-          <Link to="/privacy" className={linkCls}>Privacy</Link>
-          <Link to="/legal" className={linkCls}>Legal</Link>
+          <Link to="/pricing" className={linkCls}>{t("nav.pricing")}</Link>
+          <Link to="/faq" className={linkCls}>{t("nav.faq")}</Link>
+          <Link to="/terms" className={linkCls}>{t("nav.terms")}</Link>
+          <Link to="/privacy" className={linkCls}>{t("nav.privacy")}</Link>
+          <Link to="/legal" className={linkCls}>{t("nav.legal")}</Link>
         </nav>
-        <div className={muteCls}>© {new Date().getFullYear()} Audit.ai</div>
+        <div className={muteCls}>{t("footer.copyright", { year: new Date().getFullYear() })}</div>
       </div>
     </footer>
   );
