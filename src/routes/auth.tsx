@@ -97,6 +97,16 @@ function AuthPage() {
           <p className="mt-2 text-sm text-neutral-600">
             {mode === "login" ? t("auth.signInToRun") : t("auth.signUpToStart")}
           </p>
+          {searchError && (
+            <div role="alert" className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+              {searchError}
+            </div>
+          )}
+          {msg && (
+            <div role="status" className="mt-4 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+              {msg}
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">
             <div>
               <label className="mb-1.5 block text-sm font-medium">{t("common.email")}</label>
