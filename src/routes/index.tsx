@@ -18,11 +18,10 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Audit.ai — Find every flaw before your users do" },
-      { name: "description", content: "AI-powered product analysis. Describe your product, get a full audit report in minutes. Used by founders and indie developers pre-launch." },
-      { property: "og:title", content: "Audit.ai — Find every flaw before your users do" },
-      { property: "og:description", content: "AI-powered product analysis. Describe your product, get a full audit report in minutes. Used by founders and indie developers pre-launch." },
-      { property: "og:url", content: "https://tryauditai.com" },
+      { property: "og:url", content: "https://tryauditai.com/" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://tryauditai.com/" },
     ],
   }),
   component: Index,
