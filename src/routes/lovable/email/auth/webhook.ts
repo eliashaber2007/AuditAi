@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { renderAsync } from '@react-email/components'
-import { parseEmailWebhookPayload } from '@lovable.dev/email-js'
-import { WebhookError, verifyWebhookRequest } from '@lovable.dev/webhooks-js'
+import * as emailJs from '@lovable.dev/email-js'
+import * as webhooks from '@lovable.dev/webhooks-js'
 import { createClient } from '@supabase/supabase-js'
 import { createFileRoute } from '@tanstack/react-router'
 import { SignupEmail } from '@/lib/email-templates/signup'
@@ -61,15 +61,15 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
         let payload: any
         let run_id = ''
         try {
-          const verified = await verifyWebhookRequest({
+          const verified = await webhooks.verifyWebhookRequest({
             req: request,
             secret: apiKey,
-            parser: parseEmailWebhookPayload,
+            parser: emailJs.parseEmailWebhookPayload,
           })
           payload = verified.payload
           run_id = payload.run_id
         } catch (error) {
-          if (error instanceof WebhookError) {
+          if (error instanceof webhooks.WebhookError) {
             switch (error.code) {
               case 'invalid_signature':
               case 'missing_timestamp':
