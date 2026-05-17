@@ -194,4 +194,8 @@ export const runAudit = createServerFn({ method: "POST" })
     if (error) throw new Error(`Failed to save audit: ${error.message}`);
 
     return { id: row.id as string, report };
+    } catch (err) {
+      await refundCredit();
+      throw err;
+    }
   });
