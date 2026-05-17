@@ -8,7 +8,7 @@ async function main() {
   );
 
   const { data: users, error: userErr } = await supabaseAdmin
-    .from('users')
+    .from('auth.users')
     .select('id')
     .eq('email', 'eliashaber2007@gmail.com')
     .limit(1);
