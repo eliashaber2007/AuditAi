@@ -42,7 +42,9 @@ function HistoryPage() {
     <div className="min-h-screen bg-white text-neutral-900">
       <header className="border-b border-neutral-100 px-6 py-4">
         <div className="mx-auto flex max-w-4xl items-center justify-between">
-          <Link to="/" className="text-[22px] font-bold tracking-tight">Audit.ai</Link>
+          <Link to="/" className="text-[22px] font-bold tracking-tight">
+            Audit<span className="text-emerald-500">.ai</span>
+          </Link>
           <div className="flex items-center gap-2 sm:gap-3">
             <Link to="/history" aria-label={t("nav.myAudits")}
               className="hidden md:inline text-sm font-medium text-neutral-700 hover:text-neutral-900">{t("nav.myAudits")}</Link>
