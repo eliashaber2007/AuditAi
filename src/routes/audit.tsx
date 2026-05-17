@@ -129,7 +129,9 @@ function AuditPage() {
     <div className="min-h-screen bg-white text-neutral-900">
       <header className="border-b border-neutral-100 px-4 sm:px-6 py-4">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
-          <Link to="/" className="text-[22px] font-bold tracking-tight">Audit.ai</Link>
+          <Link to="/" className="text-[22px] font-bold tracking-tight">
+            Audit<span className="text-emerald-500">.ai</span>
+          </Link>
           <div className="flex items-center gap-2 sm:gap-3">
             <Link to="/history" aria-label={t("nav.myAudits")}
               className="hidden md:inline text-sm font-medium text-neutral-700 hover:text-neutral-900">
@@ -172,9 +174,9 @@ function AuditPage() {
                 <span>{t("audit.shortDesc")} <span className="text-neutral-400">{t("audit.minLabel")}</span></span>
                 <span className={`text-xs font-normal tabular-nums ${
                   description.length > 0 && description.length < 200 ? "text-red-600" : "text-neutral-400"
-                }`}>{description.length}/500</span>
+                }`}>{description.length}/2000</span>
               </label>
-              <textarea value={description} onChange={(e) => setDescription(e.target.value.slice(0, 500))} rows={6}
+              <textarea value={description} onChange={(e) => setDescription(e.target.value.slice(0, 2000))} rows={6}
                 className="w-full resize-none rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm outline-none focus:border-neutral-400"
                 placeholder={t("audit.descPh")} />
               <p className="mt-1.5 text-xs text-neutral-500">{t("audit.descHelp")}</p>

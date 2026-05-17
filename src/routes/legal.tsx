@@ -21,7 +21,9 @@ function LegalPage() {
     <div className="flex min-h-screen flex-col bg-white text-neutral-900">
       <header className="border-b border-neutral-100 px-6 py-4">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
-          <Link to="/" className="text-[22px] font-bold tracking-tight">Audit.ai</Link>
+          <Link to="/" className="text-[22px] font-bold tracking-tight">
+            Audit<span className="text-emerald-500">.ai</span>
+          </Link>
           <LanguageSwitcher />
         </div>
       </header>

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { verifyCheckout, getMyCredits } from "@/lib/credits.functions";
 import { useAuth } from "@/hooks/use-auth";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SiteFooter } from "@/components/SiteFooter";
 
 export const Route = createFileRoute("/success")({
@@ -64,6 +65,14 @@ function SuccessPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
+      <header className="border-b border-neutral-100 px-6 py-4">
+        <div className="mx-auto flex max-w-3xl items-center justify-between">
+          <Link to="/" className="text-[22px] font-bold tracking-tight">
+            Audit<span className="text-emerald-500">.ai</span>
+          </Link>
+          <LanguageSwitcher />
+        </div>
+      </header>
       <div className="flex flex-1 items-center justify-center px-4">
         <div className="max-w-md text-center">
           <h1 className="text-3xl font-semibold">{t("success.thanks")}</h1>
