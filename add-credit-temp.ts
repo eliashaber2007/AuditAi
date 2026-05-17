@@ -7,23 +7,24 @@ async function main() {
     { auth: { persistSession: false, autoRefreshToken: false } }
   );
 
-  const { data: users, error: userErr } = await supabaseAdmin
-    .from('auth.users')
-    .select('id')
-    .eq('email', 'eliashaber2007@gmail.com')
-    .limit(1);
+  // Use auth admin API to list users and find by email
+  const { data, error: userErr } = await supabaseAdmin.auth.admin.listUsers({
+    page: 1,
+    perPage: 1000
+  });
 
   if (userErr) {
-    console.error('Error fetching user:', userErr.message);
+    console.error('Error fetching users:', userErr.message);
     process.exit(1);
   }
 
-  if (!users || users.length === 0) {
+  const user = data.users.find((u: any) => u.email === 'eliashaber2007@gmail.com');
+  if (!user) {
     console.error('User not found: eliashaber2007@gmail.com');
     process.exit(1);
   }
 
-  const userId = users[0].id;
+  const userId = user.id;
   console.log('Found user_id:', userId);
 
   const { data: existing } = await supabaseAdmin
