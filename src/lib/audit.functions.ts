@@ -88,7 +88,7 @@ export const runAudit = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const userId = context.userId;
 
-    // Atomic credit check + deduct
+    // Check credits up-front (don't deduct yet — only charge on successful audit)
     const { data: creditRow } = await supabaseAdmin
       .from("user_credits")
       .select("credits")
@@ -98,11 +98,30 @@ export const runAudit = createServerFn({ method: "POST" })
     if (current <= 0) {
       throw new Error("NO_CREDITS");
     }
+    // Reserve the credit now to prevent concurrent double-spend.
     const { error: deductError } = await supabaseAdmin
       .from("user_credits")
       .upsert({ user_id: userId, credits: current - 1, updated_at: new Date().toISOString() });
     if (deductError) throw new Error(`Failed to deduct credit: ${deductError.message}`);
 
+    // Refund helper — re-reads current balance and adds 1 back.
+    const refundCredit = async () => {
+      try {
+        const { data: row } = await supabaseAdmin
+          .from("user_credits")
+          .select("credits")
+          .eq("user_id", userId)
+          .maybeSingle();
+        const bal = row?.credits ?? 0;
+        await supabaseAdmin
+          .from("user_credits")
+          .upsert({ user_id: userId, credits: bal + 1, updated_at: new Date().toISOString() });
+      } catch (e) {
+        console.error("Failed to refund credit for user", userId, e);
+      }
+    };
+
+    try {
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) throw new Error("ANTHROPIC_API_KEY is not configured on the server.");
 
