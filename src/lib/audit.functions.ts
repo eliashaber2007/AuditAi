@@ -32,7 +32,7 @@ async function fetchSiteContent(url: string): Promise<FetchSiteResult | null> {
       return null;
     }
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 20_000);
+    const timeoutId = setTimeout(() => controller.abort(), 45_000);
     try {
       const res = await fetch(`${base}/functions/v1/fetch-site`, {
         method: "POST",
