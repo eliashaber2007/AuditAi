@@ -12,16 +12,83 @@ export interface AuditInput {
   customInstructions: string[];
 }
 
+interface FetchSiteResult {
+  ok?: boolean;
+  fetched?: boolean;
+  title?: string;
+  metaDescription?: string;
+  headings?: { h1?: string[]; h2?: string[] };
+  buttons?: string[];
+  navLinks?: string[];
+  bodyText?: string;
+}
+
+async function fetchSiteContent(url: string): Promise<FetchSiteResult | null> {
+  try {
+    const base = process.env.SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!base || !key) {
+      console.warn("fetch-site: missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY env var");
+      return null;
+    }
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 20_000);
+    try {
+      const res = await fetch(`${base}/functions/v1/fetch-site`, {
+        method: "POST",
+        signal: controller.signal,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${key}`,
+          apikey: key,
+        },
+        body: JSON.stringify({ url }),
+      });
+      if (!res.ok) {
+        console.warn("fetch-site: non-ok response", res.status);
+        return null;
+      }
+      return (await res.json()) as FetchSiteResult;
+    } finally {
+      clearTimeout(timeoutId);
+    }
+  } catch (e) {
+    console.warn("fetch-site: threw", e);
+    return null;
+  }
+}
+
+function formatSiteContent(site: FetchSiteResult): string {
+  const h1 = site.headings?.h1?.slice(0, 20).join(" | ") ?? "";
+  const h2 = site.headings?.h2?.slice(0, 30).join(" | ") ?? "";
+  const buttons = (site.buttons ?? []).slice(0, 40).join(" | ");
+  const navLinks = (site.navLinks ?? []).slice(0, 40).join(" | ");
+  const body = (site.bodyText ?? "").slice(0, 6000);
+  return `Title: ${site.title ?? ""}
+Meta description: ${site.metaDescription ?? ""}
+H1: ${h1}
+H2: ${h2}
+Buttons: ${buttons}
+Nav links: ${navLinks}
+Body text (truncated):
+${body}`;
+}
+
 const SYSTEM_PROMPT =
   "You are a senior product QA analyst. You will receive a description of a digital product and a list of things to test. Your job is to think like 8 different expert testers — a UX designer, a developer, a security analyst, a copywriter, a payments specialist, a mobile tester, a competitor analyst, and a first-time user. Return a thorough, honest, critical audit. Be specific — no generic advice. Every issue must reference the actual product described. Respond ONLY in valid JSON with no markdown, no preamble, no code fences.";
 
-function buildUserMessage(input: AuditInput): string {
+function buildUserMessage(input: AuditInput, siteBlock: string | null, siteFailed: boolean): string {
+  const liveSection = siteBlock
+    ? `\n\nACTUAL LIVE SITE CONTENT (fetched and rendered):\n${siteBlock}`
+    : siteFailed
+      ? `\n\nNOTE: The live site at ${input.projectUrl} could not be fetched. Base the audit on the user's description only, and explicitly mention in the summary that the live site could not be accessed so analysis is based on the description alone.`
+      : "";
   return `Project name: ${input.projectName}
 URL: ${input.projectUrl || "(not provided)"}
 Description: ${input.description}
 Target users: ${input.targetUsers}
 Test categories selected: ${input.categories.join(", ")}
-Custom instructions: ${input.customInstructions.length ? input.customInstructions.join("\n") : "None"}
+Custom instructions: ${input.customInstructions.length ? input.customInstructions.join("\n") : "None"}${liveSection}
 
 Return a JSON object in exactly this format:
 {
@@ -39,6 +106,7 @@ Return a JSON object in exactly this format:
   ]
 }`;
 }
+
 
 function stripFences(text: string): string {
   let t = text.trim();
@@ -125,6 +193,16 @@ export const runAudit = createServerFn({ method: "POST" })
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) throw new Error("ANTHROPIC_API_KEY is not configured on the server.");
 
+    // Fetch live site content if a URL was provided. Never fail the audit on errors.
+    let siteBlock: string | null = null;
+    let siteFailed = false;
+    if (data.projectUrl) {
+      const site = await fetchSiteContent(data.projectUrl);
+      console.log("fetch-site result:", site?.fetched);
+      if (site && site.fetched) siteBlock = formatSiteContent(site);
+      else siteFailed = true;
+    }
+
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 55_000);
 
@@ -142,9 +220,10 @@ export const runAudit = createServerFn({ method: "POST" })
           model: "claude-haiku-4-5",
           max_tokens: 3000,
           system: SYSTEM_PROMPT,
-          messages: [{ role: "user", content: buildUserMessage(data) }],
+          messages: [{ role: "user", content: buildUserMessage(data, siteBlock, siteFailed) }],
         }),
       });
+
     } catch (err: any) {
       clearTimeout(timeoutId);
       if (err?.name === "AbortError") {
