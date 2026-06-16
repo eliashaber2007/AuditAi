@@ -12,4 +12,9 @@ export default defineConfig({
   tanstackStart: {
     server: { entry: "server" },
   },
+  // Without this, the Lovable wrapper skips the nitro deploy plugin on non-sandbox
+  // builds (Vercel CI), so no .vercel/output/ is generated and pages 404.
+  // `true` lets Nitro auto-detect the deployment target (VERCEL=1 → vercel preset,
+  // no env → cloudflare-module fallback) rather than hard-coding a preset.
+  nitro: true,
 });
