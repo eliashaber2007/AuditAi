@@ -26,13 +26,13 @@ interface FetchSiteResult {
 async function fetchSiteContent(url: string): Promise<FetchSiteResult | null> {
   try {
     const base = process.env.SUPABASE_URL;
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const key = process.env.SUPABASE_PUBLISHABLE_KEY;
     if (!base || !key) {
-      console.warn("fetch-site: missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY env var");
+      console.warn("fetch-site: missing SUPABASE_URL or SUPABASE_PUBLISHABLE_KEY env var");
       return null;
     }
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 45_000);
+    const timeoutId = setTimeout(() => controller.abort(), 20_000);
     try {
       const res = await fetch(`${base}/functions/v1/fetch-site`, {
         method: "POST",
@@ -204,7 +204,7 @@ export const runAudit = createServerFn({ method: "POST" })
     }
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 55_000);
+    const timeoutId = setTimeout(() => controller.abort(), 35_000);
 
     let res: Response;
     try {

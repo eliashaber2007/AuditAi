@@ -12,4 +12,21 @@ export default defineConfig({
   tanstackStart: {
     server: { entry: "server" },
   },
+  // Vercel deploy target. The lovable wrapper defaults to the cloudflare-module
+  // preset unless overridden here; this only takes effect outside Lovable's own
+  // sandbox build (which always forces cloudflare-module regardless of this value).
+  nitro: {
+    preset: "vercel",
+    vercel: {
+      // runAudit (and any other server fn) can run up to ~55s worst case: 20s
+      // fetch-site + 35s Anthropic (see audit.functions.ts), leaving headroom
+      // under the 60s ceiling for the credit-check DB calls + JSON parsing.
+      // All TanStack Start server functions share the /_serverFn base path, so
+      // this one rule covers all of them. 60s is the max on Vercel's free
+      // Hobby plan (Pro+ allows up to 300s/5min).
+      functionRules: {
+        "/_serverFn/**": { maxDuration: 60 },
+      },
+    },
+  },
 });

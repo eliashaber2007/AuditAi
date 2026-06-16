@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+.vercel
 .output
 .vinxi
 .tanstack/**
@@ -19,6 +20,13 @@ dist-ssr
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars
+
+# Secrets — never commit, set in deploy platform's env config instead
+.env
+.env.*
+
+# Supabase CLI local cache (contains pooler connection string)
+supabase/.temp
 
 # Editor directories and files
 .vscode/*

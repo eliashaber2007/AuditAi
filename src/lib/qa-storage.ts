@@ -25,7 +25,6 @@ export interface Report {
 }
 
 const KEY_PREFIX = "qa-report-";
-const API_KEY_STORAGE = "qa-anthropic-key";
 
 export function saveReport(id: string, report: Report) {
   localStorage.setItem(KEY_PREFIX + id, JSON.stringify(report));
@@ -39,24 +38,6 @@ export function getReport(id: string): Report | null {
   } catch {
     return null;
   }
-}
-
-export function getApiKey(): string {
-  if (typeof window === "undefined") return "";
-  return (
-    localStorage.getItem(API_KEY_STORAGE) ||
-    (import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined) ||
-    ""
-  );
-}
-
-export function setApiKey(key: string) {
-  localStorage.setItem(API_KEY_STORAGE, key);
-}
-
-export function getStoredApiKeyOnly(): string {
-  if (typeof window === "undefined") return "";
-  return localStorage.getItem(API_KEY_STORAGE) || "";
 }
 
 export function randomId(): string {
