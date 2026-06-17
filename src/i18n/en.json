@@ -104,7 +104,9 @@
     "checkEmail": "Check your email to confirm your account.",
     "failed": "Authentication failed",
     "resetPrompt": "Enter your email to receive a reset link:",
-    "passwordUpdatedRedirect": "Password updated. Please sign in with your new password."
+    "passwordUpdatedRedirect": "Password updated. Please sign in with your new password.",
+    "continueWithGoogle": "Continue with Google",
+    "or": "or"
   },
   "reset": {
     "title": "Set a new password",

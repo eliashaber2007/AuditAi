@@ -104,7 +104,9 @@
     "checkEmail": "Prüfe deine E-Mail, um dein Konto zu bestätigen.",
     "failed": "Authentifizierung fehlgeschlagen",
     "resetPrompt": "Gib deine E-Mail ein, um einen Reset-Link zu erhalten:",
-    "passwordUpdatedRedirect": "Passwort aktualisiert. Bitte melde dich mit deinem neuen Passwort an."
+    "passwordUpdatedRedirect": "Passwort aktualisiert. Bitte melde dich mit deinem neuen Passwort an.",
+    "continueWithGoogle": "Mit Google fortfahren",
+    "or": "oder"
   },
   "reset": {
     "title": "Neues Passwort festlegen",

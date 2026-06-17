@@ -104,7 +104,9 @@
     "checkEmail": "Revisa tu correo para confirmar tu cuenta.",
     "failed": "Autenticación fallida",
     "resetPrompt": "Introduce tu correo para recibir un enlace de restablecimiento:",
-    "passwordUpdatedRedirect": "Contraseña actualizada. Inicia sesión con tu nueva contraseña."
+    "passwordUpdatedRedirect": "Contraseña actualizada. Inicia sesión con tu nueva contraseña.",
+    "continueWithGoogle": "Continuar con Google",
+    "or": "o"
   },
   "reset": {
     "title": "Establecer una nueva contraseña",

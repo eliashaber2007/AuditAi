@@ -104,7 +104,9 @@
     "checkEmail": "Vérifiez votre e-mail pour confirmer votre compte.",
     "failed": "Authentification échouée",
     "resetPrompt": "Entrez votre e-mail pour recevoir un lien de réinitialisation :",
-    "passwordUpdatedRedirect": "Mot de passe mis à jour. Veuillez vous reconnecter avec votre nouveau mot de passe."
+    "passwordUpdatedRedirect": "Mot de passe mis à jour. Veuillez vous reconnecter avec votre nouveau mot de passe.",
+    "continueWithGoogle": "Continuer avec Google",
+    "or": "ou"
   },
   "reset": {
     "title": "Définir un nouveau mot de passe",

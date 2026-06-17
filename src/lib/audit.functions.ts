@@ -77,18 +77,13 @@ ${body}`;
 const SYSTEM_PROMPT =
   "You are a senior product QA analyst. You will receive a description of a digital product and a list of things to test. Your job is to think like 8 different expert testers — a UX designer, a developer, a security analyst, a copywriter, a payments specialist, a mobile tester, a competitor analyst, and a first-time user. Return a thorough, honest, critical audit. Be specific — no generic advice. Every issue must reference the actual product described. Respond ONLY in valid JSON with no markdown, no preamble, no code fences.";
 
-function buildUserMessage(input: AuditInput, siteBlock: string | null, siteFailed: boolean): string {
-  const liveSection = siteBlock
-    ? `\n\nACTUAL LIVE SITE CONTENT (fetched and rendered):\n${siteBlock}`
-    : siteFailed
-      ? `\n\nNOTE: The live site at ${input.projectUrl} could not be fetched. Base the audit on the user's description only, and explicitly mention in the summary that the live site could not be accessed so analysis is based on the description alone.`
-      : "";
+function buildUserMessage(input: AuditInput): string {
   return `Project name: ${input.projectName}
 URL: ${input.projectUrl || "(not provided)"}
 Description: ${input.description}
 Target users: ${input.targetUsers}
 Test categories selected: ${input.categories.join(", ")}
-Custom instructions: ${input.customInstructions.length ? input.customInstructions.join("\n") : "None"}${liveSection}
+Custom instructions: ${input.customInstructions.length ? input.customInstructions.join("\n") : "None"}
 
 Return a JSON object in exactly this format:
 {
@@ -193,16 +188,6 @@ export const runAudit = createServerFn({ method: "POST" })
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) throw new Error("ANTHROPIC_API_KEY is not configured on the server.");
 
-    // Fetch live site content if a URL was provided. Never fail the audit on errors.
-    let siteBlock: string | null = null;
-    let siteFailed = false;
-    if (data.projectUrl) {
-      const site = await fetchSiteContent(data.projectUrl);
-      console.log("fetch-site result:", site?.fetched);
-      if (site && site.fetched) siteBlock = formatSiteContent(site);
-      else siteFailed = true;
-    }
-
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 35_000);
 
@@ -220,7 +205,7 @@ export const runAudit = createServerFn({ method: "POST" })
           model: "claude-haiku-4-5",
           max_tokens: 3000,
           system: SYSTEM_PROMPT,
-          messages: [{ role: "user", content: buildUserMessage(data, siteBlock, siteFailed) }],
+          messages: [{ role: "user", content: buildUserMessage(data) }],
         }),
       });
 
